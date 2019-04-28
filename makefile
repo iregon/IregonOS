@@ -8,7 +8,7 @@ GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-excep
 ASPARAMS = --32
 LDPARAMS = -melf_i386 -s
 
-objects = loader.o gdt.o kernel.o
+objects = loader.o gdt.o port.o kernel.o
 
 
 # BEGIN generation object files
@@ -49,3 +49,7 @@ run: mykernel.iso
 install: mykernel.bin
 	sudo cp $< /boot/mykernel.bin
 # END
+
+.PHONY: clean
+clean:
+	rm -f $(objects) mykernel.bin mykernel.iso
