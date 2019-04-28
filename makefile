@@ -11,17 +11,18 @@ LDPARAMS = -melf_i386 -s
 objects = loader.o kernel.o
 
 
-
+# BEGIN generation object files
 %.o: %.cpp
 	gcc $(GCCPARAMS) -c -o $@ $<
 
 %.o: %.s
 	as $(ASPARAMS) -o $@ $<
+# END
 
 mykernel.bin: linker.ld $(objects)
 	ld $(LDPARAMS) -T $< -o $@ $(objects)
 
-# BEGIN creazione dell'immagine iso dell'os
+# BEGIN generation of iso image
 mykernel.iso: mykernel.bin
 	mkdir iso
 	mkdir iso/boot
@@ -36,13 +37,13 @@ mykernel.iso: mykernel.bin
 	echo '}'                                 >> iso/boot/grub/grub.cfg
 	grub-mkrescue --output=mykernel.iso iso
 	rm -rf iso
-# END creazione dell'immagine iso dell'os
+# END
 
-# BEGIN esecuzione dell'os su macchina virtuale
+# BEGIN launch iso on virtualbox's virtual machine
 run: mykernel.iso
 	(killall VirtualBox && sleep 1) || true
 	VirtualBox --startvm 'My Operating System' &
-# END esecuzione dell'os su macchina virtuale
+# END
 
 install: mykernel.bin
 	sudo cp $< /boot/mykernel.bin
