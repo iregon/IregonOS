@@ -66,6 +66,12 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
             case 0x33: printf(","); break;
             case 0x34: printf("."); break;
             case 0x35: printf("-"); break;
+            
+            case 0x1D: // CTRL sx
+            case 0x38: // ALT
+            case 0x48: case 0x4B: case 0x50: case 0x4D: // arrows (top, right, bottom, left)
+            case 0x36: // SHIFT
+                break;
 
             case 0x1C: printf("\n"); break;
             case 0x39: printf(" "); break;
