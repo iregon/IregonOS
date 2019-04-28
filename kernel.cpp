@@ -1,5 +1,6 @@
 #include "types.h"
 #include "gdt.h"
+#include "interrupts.h"
 
 void printf(char* str) {
     static uint16_t* videoMemory = (uint16_t*)0xb8000;
@@ -48,6 +49,8 @@ extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot
     printf("Hello World! --- Alessandro Tornesello --- https://github.com/iregon/my_os");
     
     GlobalDescriptorTable gdt;
+    InterruptManager interrupts(0x20, &gdt);
+    interrupts.Activate();
 
     while(1);
 }
