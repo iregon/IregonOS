@@ -8,7 +8,7 @@ GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-excep
 ASPARAMS = --32
 LDPARAMS = -melf_i386 -s
 
-objects = loader.o kernel.o
+objects = loader.o gdt.o kernel.o
 
 
 # BEGIN generation object files
@@ -45,5 +45,7 @@ run: mykernel.iso
 	VirtualBox --startvm 'My Operating System' &
 # END
 
+# BEGIN copy bin file into boot folder 
 install: mykernel.bin
 	sudo cp $< /boot/mykernel.bin
+# END
