@@ -79,7 +79,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
         case 0xAA: case 0xB6: is_shift_pressed = false; break; // SHIFT relased
         
         // Capslock
-        case 0x34: is_capslock_active = !is_capslock_active;
+        case 0x3A: is_capslock_active = !is_capslock_active;
         
         case 0x1C: printf("\n"); break;
         case 0x39: printf(" "); break;
