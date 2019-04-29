@@ -27,16 +27,16 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
     static bool is_capslock_active = false;
     
     switch(key) {
-        case 0x02: if (is_shift_pressed || is_capslock_active) printf("!"); else printf("1"); break;
-        case 0x03: if (is_shift_pressed || is_capslock_active) printf("\""); else printf("2"); break;
-        case 0x04: if (is_shift_pressed || is_capslock_active) printf("£"); else printf("3"); break;
-        case 0x05: if (is_shift_pressed || is_capslock_active) printf("$"); else printf("4"); break;
-        case 0x06: if (is_shift_pressed || is_capslock_active) printf("%"); else printf("5"); break;
-        case 0x07: if (is_shift_pressed || is_capslock_active) printf("&"); else printf("6"); break;
-        case 0x08: if (is_shift_pressed || is_capslock_active) printf("/"); else printf("7"); break;
-        case 0x09: if (is_shift_pressed || is_capslock_active) printf("("); else printf("8"); break;
-        case 0x0A: if (is_shift_pressed || is_capslock_active) printf(")"); else printf("9"); break;
-        case 0x0B: if (is_shift_pressed || is_capslock_active) printf("="); else printf("0"); break;
+        case 0x02: if (is_shift_pressed) printf("!"); else printf("1"); break;
+        case 0x03: if (is_shift_pressed) printf("\""); else printf("2"); break;
+        case 0x04: if (is_shift_pressed) printf("£"); else printf("3"); break;
+        case 0x05: if (is_shift_pressed) printf("$"); else printf("4"); break;
+        case 0x06: if (is_shift_pressed) printf("%"); else printf("5"); break;
+        case 0x07: if (is_shift_pressed) printf("&"); else printf("6"); break;
+        case 0x08: if (is_shift_pressed) printf("/"); else printf("7"); break;
+        case 0x09: if (is_shift_pressed) printf("("); else printf("8"); break;
+        case 0x0A: if (is_shift_pressed) printf(")"); else printf("9"); break;
+        case 0x0B: if (is_shift_pressed) printf("="); else printf("0"); break;
 
         case 0x10: if (is_shift_pressed || is_capslock_active) printf("Q"); else printf("q"); break;
         case 0x11: if (is_shift_pressed || is_capslock_active) printf("W"); else printf("w"); break;
