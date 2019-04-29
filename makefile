@@ -4,18 +4,28 @@
 # Part 2
 # sudo apt-get install VirtualBox grub-legacy xorriso
 
-GCCPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
+GCCPARAMS = -m32 -Iinclude -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
 ASPARAMS = --32
 LDPARAMS = -melf_i386 -s
 
-objects = loader.o gdt.o port.o interruptstubs.o interrupts.o keyboard.o mouse.o kernel.o
+objects = obj/loader.o \
+          obj/gdt.o \
+          obj/drivers/driver.o \
+          obj/hardwarecommunication/port.o \
+          obj/hardwarecommunication/interruptstubs.o \
+          obj/hardwarecommunication/interrupts.o \
+          obj/drivers/keyboard.o \
+          obj/drivers/mouse.o \
+          obj/kernel.o
 
 
 # BEGIN generation object files
-%.o: %.cpp
+obj/%.o: src/%.cpp
+	mkdir -p $(@D)
 	gcc $(GCCPARAMS) -c -o $@ $<
 
-%.o: %.s
+obj/%.o: src/%.s
+	mkdir -p $(@D)
 	as $(ASPARAMS) -o $@ $<
 # END
 
@@ -41,8 +51,8 @@ mykernel.iso: mykernel.bin
 
 # BEGIN launch iso on virtualbox's virtual machine
 run: mykernel.iso
-	(killall VirtualBox && sleep 1) || true
-	VirtualBox --startvm 'My Operating System' &
+	(killall VirtualBoxVM && sleep 5) || true
+	VirtualBoxVM --startvm 'My Operating System' &
 # END
 
 # BEGIN copy bin file into boot folder 
@@ -52,4 +62,4 @@ install: mykernel.bin
 
 .PHONY: clean
 clean:
-	rm -f $(objects) mykernel.bin mykernel.iso
+	rm -rf obj mykernel.bin mykernel.iso
