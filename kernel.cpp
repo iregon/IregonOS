@@ -23,7 +23,8 @@ void printf(char* str) {
             x = 0;
             y++;
         }
-
+        
+        // Clean screen
         if(y >= 25) {
             for(y = 0; y < 25; y++)
                 for(x = 0; x < 80; x++)
@@ -47,7 +48,7 @@ extern "C" void callConstructors() {
 
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t /*multiboot_magic*/) {
-    printf("Hello World! --- Alessandro Tornesello --- https://github.com/iregon/my_os");
+    printf("Hello World! --- Alessandro Tornesello --- https://github.com/iregon/my_os\n");
     
     GlobalDescriptorTable gdt;
     InterruptManager interrupts(0x20, &gdt);
