@@ -43,7 +43,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
         case 0x12: if (is_shift_pressed || is_capslock_active) printf("E"); else printf("e"); break;
         case 0x13: if (is_shift_pressed || is_capslock_active) printf("R"); else printf("r"); break;
         case 0x14: if (is_shift_pressed || is_capslock_active) printf("T"); else printf("t"); break;
-        case 0x15: if (is_shift_pressed || is_capslock_active) printf("Y"); else printf("z"); break;
+        case 0x15: if (is_shift_pressed || is_capslock_active) printf("Y"); else printf("y"); break;
         case 0x16: if (is_shift_pressed || is_capslock_active) printf("U"); else printf("u"); break;
         case 0x17: if (is_shift_pressed || is_capslock_active) printf("I"); else printf("i"); break;
         case 0x18: if (is_shift_pressed || is_capslock_active) printf("O"); else printf("o"); break;
@@ -59,7 +59,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
         case 0x25: if (is_shift_pressed || is_capslock_active) printf("K"); else printf("k"); break;
         case 0x26: if (is_shift_pressed || is_capslock_active) printf("L"); else printf("l"); break;
 
-        case 0x2C: if (is_shift_pressed || is_capslock_active) printf("Z"); else printf("y"); break;
+        case 0x2C: if (is_shift_pressed || is_capslock_active) printf("Z"); else printf("z"); break;
         case 0x2D: if (is_shift_pressed || is_capslock_active) printf("X"); else printf("x"); break;
         case 0x2E: if (is_shift_pressed || is_capslock_active) printf("C"); else printf("c"); break;
         case 0x2F: if (is_shift_pressed || is_capslock_active) printf("V"); else printf("v"); break;
@@ -70,16 +70,21 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
         case 0x34: if (is_shift_pressed || is_capslock_active) printf(":"); else printf("."); break;
         case 0x35: if (is_shift_pressed || is_capslock_active) printf("_"); else printf("-"); break;
         
+        // keys to ignore
         case 0x1D: // CTRL sx
         case 0x38: // ALT
         case 0x48: case 0x4B: case 0x50: case 0x4D: // arrows (top, right, bottom, left)
+        case 0x5b: // Windows
             break;
             
         case 0x2A: case 0x36: is_shift_pressed = true; break; // SHIFT pressed
         case 0xAA: case 0xB6: is_shift_pressed = false; break; // SHIFT relased
         
         // Capslock
-        case 0x3A: is_capslock_active = !is_capslock_active;
+        case 0x3A: is_capslock_active = !is_capslock_active; break;
+        
+        // TAP
+        case 0x0F: printf("\t"); break;
         
         case 0x1C: printf("\n"); break;
         case 0x39: printf(" "); break;
