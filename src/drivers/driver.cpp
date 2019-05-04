@@ -1,4 +1,5 @@
 #include <drivers/driver.h>
+
 using namespace iregonos::drivers;
 
 Driver::Driver() {
@@ -22,12 +23,12 @@ DriverManager::DriverManager() {
     numDrivers = 0;
 }
 
-void DriverManager::AddDriver(Driver* drv) {
+void DriverManager::AddDriver(Driver *drv) {
     drivers[numDrivers] = drv;
     numDrivers++;
 }
 
 void DriverManager::ActivateAll() {
-    for(int i = 0; i < numDrivers; i++)
+    for (int i = 0; i < numDrivers; i++)
         drivers[i]->Activate();
 }

@@ -4,7 +4,6 @@
 
 .extern _ZN8iregonos21hardwarecommunication16InterruptManager15HandleInterruptEhj
 
-
 .macro HandleException num
 .global _ZN8iregonos21hardwarecommunication16InterruptManager19HandleException\num\()Ev
 _ZN8iregonos21hardwarecommunication16InterruptManager19HandleException\num\()Ev:
@@ -91,7 +90,6 @@ int_bottom:
 
 .global _ZN8iregonos21hardwarecommunication16InterruptManager15InterruptIgnoreEv
 _ZN8iregonos21hardwarecommunication16InterruptManager15InterruptIgnoreEv:
-
     iret
 
 .data

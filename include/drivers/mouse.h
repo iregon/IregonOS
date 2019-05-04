@@ -6,18 +6,19 @@
 #include <drivers/driver.h>
 #include <hardwarecommunication/interrupts.h>
 
-namespace iregonos
-{
-    namespace drivers
-    {
+namespace iregonos {
+    namespace drivers {
 
         class MouseEventHandler {
         public:
             MouseEventHandler();
 
             virtual void OnActivate();
+
             virtual void OnMouseDown(iregonos::common::uint8_t button);
+
             virtual void OnMouseUp(iregonos::common::uint8_t button);
+
             virtual void OnMouseMove(int x, int y);
         };
 
@@ -28,11 +29,15 @@ namespace iregonos
             iregonos::common::uint8_t offset;
             iregonos::common::uint8_t buttons;
 
-            MouseEventHandler* handler;
+            MouseEventHandler *handler;
+            
         public:
-            MouseDriver(iregonos::hardwarecommunication::InterruptManager* manager, MouseEventHandler* handler);
+            MouseDriver(iregonos::hardwarecommunication::InterruptManager *manager, MouseEventHandler *handler);
+
             ~MouseDriver();
+
             virtual iregonos::common::uint32_t HandleInterrupt(iregonos::common::uint32_t esp);
+
             virtual void Activate();
         };
     }
