@@ -12,6 +12,7 @@ using namespace iregonos::drivers;
 using namespace iregonos::hardwarecommunication;
 
 void cleanScreen();
+
 void deleteCharacter(int x, int y);
 
 void printf(char *str) {
@@ -138,10 +139,10 @@ extern "C" void kernelMain(const void *multiboot_structure, uint32_t /*multiboot
     MouseToConsole mousehandler;
     MouseDriver mouse(&interrupts, &mousehandler);
     drvManager.AddDriver(&mouse);
-	
-	PeripheralComponentInterconnectController PCIController;
-	PCIController.SelectDrivers(&drvManager);
-	
+
+    PeripheralComponentInterconnectController PCIController;
+    PCIController.SelectDrivers(&drvManager);
+
     printf("Initializing Hardware, Stage 2\n");
     drvManager.ActivateAll();
 

@@ -28,6 +28,7 @@ namespace myos {
             myos::common::uint8_t revision;
 
             PeripheralComponentInterconnectDeviceDescriptor();
+
             ~PeripheralComponentInterconnectDeviceDescriptor();
 
         };
@@ -37,16 +38,25 @@ namespace myos {
             Port32Bit dataPort;
             Port32Bit commandPort;
 
-         public:
+        public:
             PeripheralComponentInterconnectController();
+
             ~PeripheralComponentInterconnectController();
 
-            myos::common::uint32_t Read(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function, myos::common::uint32_t registeroffset);
-            void Write(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function, myos::common::uint32_t registeroffset, myos::common::uint32_t value);
+            myos::common::uint32_t
+            Read(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function,
+                 myos::common::uint32_t registeroffset);
+
+            void Write(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function,
+                       myos::common::uint32_t registeroffset, myos::common::uint32_t value);
+
             bool DeviceHasFunctions(myos::common::uint16_t bus, myos::common::uint16_t device);
 
-            void SelectDrivers(myos::drivers::DriverManager* driverManager);
-            PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function);
+            void SelectDrivers(myos::drivers::DriverManager *driverManager);
+
+            PeripheralComponentInterconnectDeviceDescriptor
+            GetDeviceDescriptor(myos::common::uint16_t bus, myos::common::uint16_t device,
+                                myos::common::uint16_t function);
         };
     }
 }
