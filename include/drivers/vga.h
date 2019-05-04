@@ -52,14 +52,14 @@ namespace iregonos {
                                  common::uint32_t height,
                                  common::uint32_t colordepth);
 
-            virtual void PutPixel(common::uint32_t x,
-                                  common::uint32_t y,
-                                  common::uint8_t r,
-                                  common::uint8_t g,
+            virtual void PutPixel(common::int32_t x, 
+                                  common::int32_t y,  
+                                  common::uint8_t r, 
+                                  common::uint8_t g, 
                                   common::uint8_t b);
-
-            virtual void PutPixel(common::uint32_t x,
-                                  common::uint32_t y,
+            
+            virtual void PutPixel(common::int32_t x, 
+                                  common::int32_t y, 
                                   common::uint8_t colorIndex);
 
             virtual void FillRectangle(common::uint32_t x,

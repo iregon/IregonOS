@@ -5,7 +5,7 @@
 
 namespace iregonos {
     namespace common {
-        typedef GraphicsContext VideoGraphicsArray;
+        typedef iregonos::drivers::VideoGraphicsArray GraphicsContext;
     }
 }
 

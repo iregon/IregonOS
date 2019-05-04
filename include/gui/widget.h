@@ -1,13 +1,14 @@
 #ifndef __IREGONOS__GUI__WIDGET_H
 #define __IREGONOS__GUI__WIDGET_H
 
-
 #include <common/types.h>
 #include <common/graphicscontext.h>
+#include <drivers/keyboard.h>
 
 namespace iregonos {
     namespace gui {
-        class Widget {
+        
+        class Widget : public iregonos::drivers::KeyboardEventHandler {
         protected:
             Widget *parent;
             common::int32_t x;
@@ -44,24 +45,23 @@ namespace iregonos {
             virtual void ModelToScreen(common::int32_t &x,
                                        common::int32_t &y);
 
-            virtual void Draw(GraphicsContext *gc);
-
-            virtual void OnMouseDown(common::int32_t x,
-                                     common::int32_t y);
-
-            virtual void OnMouseUp(common::int32_t x,
-                                   common::int32_t y);
+            virtual bool ContainsCoordinate(common::int32_t x, 
+                                            common::int32_t y);
+            
+            virtual void Draw(common::GraphicsContext* gc);
+            
+            virtual void OnMouseDown(common::int32_t x, 
+                                     common::int32_t y, 
+                                     common::uint8_t button);
+            
+            virtual void OnMouseUp(common::int32_t x, 
+                                   common::int32_t y, 
+                                   common::uint8_t button);
 
             virtual void OnMouseMove(common::int32_t oldx,
                                      common::int32_t oldy,
                                      common::int32_t newx,
                                      common::int32_t newy);
-
-            virtual void OnKeyDown(common::int32_t x,
-                                   common::int32_t y);
-
-            virtual void OnKeyUp(common::int32_t x,
-                                 common::int32_t y);
         };
 
         class CompositeWidget : public Widget {
@@ -84,24 +84,26 @@ namespace iregonos {
 
             virtual void GetFocus(Widget *widget);
 
-            virtual void Draw(GraphicsContext *gc);
+            virtual void Draw(common::GraphicsContext *gc);
+            
+            virtual bool AddChild(Widget* child);
 
             virtual void OnMouseDown(common::int32_t x,
-                                     common::int32_t y);
+                                     common::int32_t y, 
+                                     common::uint8_t button);
 
             virtual void OnMouseUp(common::int32_t x,
-                                   common::int32_t y);
+                                   common::int32_t y, 
+                                   common::uint8_t button);
 
             virtual void OnMouseMove(common::int32_t oldx,
                                      common::int32_t oldy,
                                      common::int32_t newx,
                                      common::int32_t newy);
 
-            virtual void OnKeyDown(common::int32_t x,
-                                   common::int32_t y);
+            virtual void OnKeyDown(char);
 
-            virtual void OnKeyUp(common::int32_t x,
-                                 common::int32_t y);
+            virtual void OnKeyUp(char);
         };
     }
 }
