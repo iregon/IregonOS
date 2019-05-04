@@ -1,5 +1,5 @@
-#ifndef __iregonos__DRIVERS__MOUSE_H
-#define __iregonos__DRIVERS__MOUSE_H
+#ifndef __IREGONOS__DRIVERS__MOUSE_H
+#define __IREGONOS__DRIVERS__MOUSE_H
 
 #include <common/types.h>
 #include <hardwarecommunication/port.h>

@@ -1,6 +1,7 @@
 #include <common/types.h>
 #include <gdt.h>
 #include <hardwarecommunication/interrupts.h>
+#include <hardwarecommunication/pci.h>
 #include <drivers/driver.h>
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
@@ -11,6 +12,7 @@ using namespace iregonos::drivers;
 using namespace iregonos::hardwarecommunication;
 
 void cleanScreen();
+void deleteCharacter(int x, int y);
 
 void printf(char *str) {
     static uint16_t *videoMemory = (uint16_t *) 0xb8000;
@@ -51,7 +53,11 @@ void cleanScreen() {
 
     for (int y = 0; y < 25; y++)
         for (int x = 0; x < 80; x++)
-            videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | ' ';
+            deleteCharacter(x, y);
+}
+
+void deleteCharacter(int x, int y) {
+    videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | ' ';
 }
 
 void printfHex(uint8_t key) {
@@ -132,7 +138,10 @@ extern "C" void kernelMain(const void *multiboot_structure, uint32_t /*multiboot
     MouseToConsole mousehandler;
     MouseDriver mouse(&interrupts, &mousehandler);
     drvManager.AddDriver(&mouse);
-
+	
+	PeripheralComponentInterconnectController PCIController;
+	PCIController.SelectDrivers(&drvManager);
+	
     printf("Initializing Hardware, Stage 2\n");
     drvManager.ActivateAll();
 

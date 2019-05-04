@@ -1,5 +1,5 @@
-#ifndef __iregonos__DRIVERS__DRIVER_H
-#define __iregonos__DRIVERS__DRIVER_H
+#ifndef __IREGONOS__DRIVERS__DRIVER_H
+#define __IREGONOS__DRIVERS__DRIVER_H
 
 namespace iregonos {
     namespace drivers {

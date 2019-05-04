@@ -1,5 +1,5 @@
-#ifndef __iregonos__DRIVERS__KEYBOARD_H
-#define __iregonos__DRIVERS__KEYBOARD_H
+#ifndef __IREGONOS__DRIVERS__KEYBOARD_H
+#define __IREGONOS__DRIVERS__KEYBOARD_H
 
 #include <common/types.h>
 #include <hardwarecommunication/interrupts.h>

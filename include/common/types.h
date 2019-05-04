@@ -1,5 +1,5 @@
-#ifndef __iregonos__COMMON__TYPES_H
-#define __iregonos__COMMON__TYPES_H
+#ifndef __IREGONOS__COMMON__TYPES_H
+#define __IREGONOS__COMMON__TYPES_H
 
 namespace iregonos
 {
@@ -13,6 +13,8 @@ namespace iregonos
         typedef unsigned int           uint32_t;
         typedef long long int           int64_t;
         typedef unsigned long long int uint64_t;
+        
+        typedef const char*              string;
     }
 }
 #endif

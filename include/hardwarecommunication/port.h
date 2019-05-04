@@ -1,5 +1,5 @@
-#ifndef __iregonos__HARDWARECOMMUNICATION__PORT_H
-#define __iregonos__HARDWARECOMMUNICATION__PORT_H
+#ifndef __IREGONOS__HARDWARECOMMUNICATION__PORT_H
+#define __IREGONOS__HARDWARECOMMUNICATION__PORT_H
 
 #include <common/types.h>
 

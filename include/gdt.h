@@ -1,5 +1,5 @@
-#ifndef __iregonos__GDT_H
-#define __iregonos__GDT_H
+#ifndef __IREGONOS__GDT_H
+#define __IREGONOS__GDT_H
 
 #include <common/types.h>
 
