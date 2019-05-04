@@ -18,8 +18,8 @@ namespace iregonos {
         {
         public:
             bool prefetchable;
-            myos::common::uint8_t* address;
-            myos::common::uint32_t size;
+            iregonos::common::uint8_t* address;
+            iregonos::common::uint32_t size;
             BaseAddressRegisterType type;
         };
 
@@ -71,11 +71,20 @@ namespace iregonos {
             bool DeviceHasFunctions(iregonos::common::uint16_t bus, 
                                     iregonos::common::uint16_t device);
 
-            void SelectDrivers(iregonos::drivers::DriverManager *driverManager);
+            void SelectDrivers(iregonos::drivers::DriverManager* driverManager, 
+                               iregonos::hardwarecommunication::InterruptManager* interrupts);
+            
+            iregonos::drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev,
+                                                 iregonos::hardwarecommunication::InterruptManager* interrupts);
 
             PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(iregonos::common::uint16_t bus, 
                                                                                 iregonos::common::uint16_t device,
                                                                                 iregonos::common::uint16_t function);
+            
+            BaseAddressRegister GetBaseAddressRegister(iregonos::common::uint16_t bus, 
+                                                       iregonos::common::uint16_t device, 
+                                                       iregonos::common::uint16_t function, 
+                                                       iregonos::common::uint16_t bar);
         };
     }
 }
