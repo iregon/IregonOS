@@ -33,7 +33,8 @@ namespace iregonos {
                 return result;
             }
 
-            static inline void Write8(iregonos::common::uint16_t _port, iregonos::common::uint8_t _data) {
+            static inline void Write8(iregonos::common::uint16_t _port, 
+                                      iregonos::common::uint8_t _data) {
                 __asm__ volatile("outb %0, %1" : : "a" (_data), "Nd" (_port));
             }
         };
@@ -47,7 +48,8 @@ namespace iregonos {
             virtual void Write(iregonos::common::uint8_t data);
             
         protected:
-            static inline void Write8Slow(iregonos::common::uint16_t _port, iregonos::common::uint8_t _data) {
+            static inline void Write8Slow(iregonos::common::uint16_t _port, 
+                                          iregonos::common::uint8_t _data) {
                 __asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (_data), "Nd" (_port));
             }
         };
@@ -69,7 +71,8 @@ namespace iregonos {
                 return result;
             }
 
-            static inline void Write16(iregonos::common::uint16_t _port, iregonos::common::uint16_t _data) {
+            static inline void Write16(iregonos::common::uint16_t _port, 
+                                       iregonos::common::uint16_t _data) {
                 __asm__ volatile("outw %0, %1" : : "a" (_data), "Nd" (_port));
             }
         };
@@ -91,7 +94,8 @@ namespace iregonos {
                 return result;
             }
 
-            static inline void Write32(iregonos::common::uint16_t _port, iregonos::common::uint32_t _data) {
+            static inline void Write32(iregonos::common::uint16_t _port, 
+                                       iregonos::common::uint32_t _data) {
                 __asm__ volatile("outl %0, %1" : : "a"(_data), "Nd" (_port));
             }
         };

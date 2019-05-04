@@ -11,7 +11,8 @@ void KeyboardEventHandler::OnKeyDown(char) {}
 void KeyboardEventHandler::OnKeyUp(char) {}
 
 
-KeyboardDriver::KeyboardDriver(InterruptManager *manager, KeyboardEventHandler *handler)
+KeyboardDriver::KeyboardDriver(InterruptManager *manager, 
+                               KeyboardEventHandler *handler)
         : InterruptHandler(manager, 0x21),
           dataport(0x60),
           commandport(0x64) {

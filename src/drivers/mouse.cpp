@@ -16,7 +16,8 @@ void MouseEventHandler::OnMouseUp(uint8_t button) {}
 
 void MouseEventHandler::OnMouseMove(int x, int y) {}
 
-MouseDriver::MouseDriver(InterruptManager *manager, MouseEventHandler *handler)
+MouseDriver::MouseDriver(InterruptManager *manager, 
+                         MouseEventHandler *handler)
         : InterruptHandler(manager, 0x2C),
           dataport(0x60),
           commandport(0x64) {

@@ -8,6 +8,20 @@
 
 namespace iregonos {
     namespace hardwarecommunication {
+        enum BaseAddressRegisterType
+        {
+            MemoryMapping = 0,
+            InputOutput = 1
+        };
+
+        class BaseAddressRegister
+        {
+        public:
+            bool prefetchable;
+            myos::common::uint8_t* address;
+            myos::common::uint32_t size;
+            BaseAddressRegisterType type;
+        };
 
         class PeripheralComponentInterconnectDeviceDescriptor {
         public:
@@ -43,20 +57,25 @@ namespace iregonos {
 
             ~PeripheralComponentInterconnectController();
 
-            iregonos::common::uint32_t
-            Read(iregonos::common::uint16_t bus, iregonos::common::uint16_t device, iregonos::common::uint16_t function,
-                 iregonos::common::uint32_t registeroffset);
+            iregonos::common::uint32_t Read(iregonos::common::uint16_t bus, 
+                                            iregonos::common::uint16_t device, 
+                                            iregonos::common::uint16_t function,
+                                            iregonos::common::uint32_t registeroffset);
 
-            void Write(iregonos::common::uint16_t bus, iregonos::common::uint16_t device, iregonos::common::uint16_t function,
-                       iregonos::common::uint32_t registeroffset, iregonos::common::uint32_t value);
+            void Write(iregonos::common::uint16_t bus, 
+                       iregonos::common::uint16_t device, 
+                       iregonos::common::uint16_t function,
+                       iregonos::common::uint32_t registeroffset, 
+                       iregonos::common::uint32_t value);
 
-            bool DeviceHasFunctions(iregonos::common::uint16_t bus, iregonos::common::uint16_t device);
+            bool DeviceHasFunctions(iregonos::common::uint16_t bus, 
+                                    iregonos::common::uint16_t device);
 
             void SelectDrivers(iregonos::drivers::DriverManager *driverManager);
 
-            PeripheralComponentInterconnectDeviceDescriptor
-            GetDeviceDescriptor(iregonos::common::uint16_t bus, iregonos::common::uint16_t device,
-                                iregonos::common::uint16_t function);
+            PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(iregonos::common::uint16_t bus, 
+                                                                                iregonos::common::uint16_t device,
+                                                                                iregonos::common::uint16_t function);
         };
     }
 }

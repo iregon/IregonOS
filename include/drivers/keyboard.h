@@ -24,7 +24,8 @@ namespace iregonos {
             KeyboardEventHandler *handler;
 
         public:
-            KeyboardDriver(iregonos::hardwarecommunication::InterruptManager *manager, KeyboardEventHandler *handler);
+            KeyboardDriver(iregonos::hardwarecommunication::InterruptManager *manager, 
+                           KeyboardEventHandler *handler);
 
             ~KeyboardDriver();
 

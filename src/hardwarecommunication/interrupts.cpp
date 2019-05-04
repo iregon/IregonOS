@@ -8,7 +8,8 @@ void printf(char *str);
 void printfHex(uint8_t);
 
 
-InterruptHandler::InterruptHandler(InterruptManager *interruptManager, uint8_t InterruptNumber) {
+InterruptHandler::InterruptHandler(InterruptManager *interruptManager, 
+                                   uint8_t InterruptNumber) {
     this->InterruptNumber = InterruptNumber;
     this->interruptManager = interruptManager;
     interruptManager->handlers[InterruptNumber] = this;
@@ -44,7 +45,8 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
 }
 
 
-InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable *globalDescriptorTable)
+InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, 
+                                   GlobalDescriptorTable *globalDescriptorTable)
         : programmableInterruptControllerMasterCommandPort(0x20),
           programmableInterruptControllerMasterDataPort(0x21),
           programmableInterruptControllerSlaveCommandPort(0xA0),
@@ -160,13 +162,15 @@ void InterruptManager::Deactivate() {
     }
 }
 
-uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, uint32_t esp) {
+uint32_t InterruptManager::HandleInterrupt(uint8_t interrupt, 
+                                           uint32_t esp) {
     if (ActiveInterruptManager != 0)
         return ActiveInterruptManager->DoHandleInterrupt(interrupt, esp);
     return esp;
 }
 
-uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, uint32_t esp) {
+uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt, 
+                                             uint32_t esp) {
     if (handlers[interrupt] != 0) {
         esp = handlers[interrupt]->HandleInterrupt(esp);
     } else if (interrupt != hardwareInterruptOffset) {

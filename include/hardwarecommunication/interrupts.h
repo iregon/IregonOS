@@ -16,7 +16,8 @@ namespace iregonos {
             
             InterruptManager *interruptManager;
 
-            InterruptHandler(InterruptManager *interruptManager, iregonos::common::uint8_t InterruptNumber);
+            InterruptHandler(InterruptManager *interruptManager, 
+                             iregonos::common::uint8_t InterruptNumber);
 
             ~InterruptHandler();
 
@@ -91,6 +92,8 @@ namespace iregonos {
             static void HandleInterruptRequest0x0F();
 
             static void HandleInterruptRequest0x31();
+            
+            
 
             static void HandleException0x00();
 
@@ -132,8 +135,11 @@ namespace iregonos {
 
             static void HandleException0x13();
 
-            static iregonos::common::uint32_t HandleInterrupt(iregonos::common::uint8_t interrupt, iregonos::common::uint32_t esp);
-            iregonos::common::uint32_t DoHandleInterrupt(iregonos::common::uint8_t interrupt, iregonos::common::uint32_t esp);
+            static iregonos::common::uint32_t HandleInterrupt(iregonos::common::uint8_t interrupt,
+                                                              iregonos::common::uint32_t esp);
+            
+            iregonos::common::uint32_t DoHandleInterrupt(iregonos::common::uint8_t interrupt, 
+                                                         iregonos::common::uint32_t esp);
 
             Port8BitSlow programmableInterruptControllerMasterCommandPort;
             Port8BitSlow programmableInterruptControllerMasterDataPort;

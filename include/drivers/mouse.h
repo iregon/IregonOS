@@ -32,7 +32,8 @@ namespace iregonos {
             MouseEventHandler *handler;
             
         public:
-            MouseDriver(iregonos::hardwarecommunication::InterruptManager *manager, MouseEventHandler *handler);
+            MouseDriver(iregonos::hardwarecommunication::InterruptManager *manager, 
+                        MouseEventHandler *handler);
 
             ~MouseDriver();
 

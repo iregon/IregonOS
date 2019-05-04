@@ -18,7 +18,9 @@ namespace iregonos {
             iregonos::common::uint8_t base_vhi;
 
         public:
-            SegmentDescriptor(iregonos::common::uint32_t base, iregonos::common::uint32_t limit, iregonos::common::uint8_t type);
+            SegmentDescriptor(iregonos::common::uint32_t base, 
+                              iregonos::common::uint32_t limit, 
+                              iregonos::common::uint8_t type);
             iregonos::common::uint32_t Base();
             iregonos::common::uint32_t Limit();
         } __attribute__((packed));

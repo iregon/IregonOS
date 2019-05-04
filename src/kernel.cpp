@@ -11,9 +11,11 @@ using namespace iregonos::common;
 using namespace iregonos::drivers;
 using namespace iregonos::hardwarecommunication;
 
-void cleanScreen(int length, int height);
+void cleanScreen(int length, 
+                 int height);
 
-void deleteCharacter(int x, int y);
+void deleteCharacter(int x, 
+                     int y);
 
 void printf(char *str) {
     static uint16_t *videoMemory = (uint16_t *) 0xb8000;
@@ -49,13 +51,15 @@ void printf(char *str) {
     }
 }
 
-void cleanScreen(int length, int height) {
+void cleanScreen(int length, 
+                 int height) {
     for (int y = 0; y < height; y++)
         for (int x = 0; x < length; x++)
             deleteCharacter(x, y);
 }
 
-void deleteCharacter(int x, int y) {
+void deleteCharacter(int x, 
+                     int y) {
 	static uint16_t *videoMemory = (uint16_t *) 0xb8000;
 	
     videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | ' ';
@@ -119,8 +123,10 @@ extern "C" void callConstructors() {
         (*i)();
 }
 
-extern "C" void kernelMain(const void *multiboot_structure, uint32_t /*multiboot_magic*/) {
+extern "C" void kernelMain(const void *multiboot_structure, 
+                           uint32_t /*multiboot_magic*/) {
     printf("IregonOS\nAlessandro Tornesello --- https://github.com/iregon/IregonOS\n");
+    
     GlobalDescriptorTable gdt;
     InterruptManager interrupts(0x20, &gdt);
 
