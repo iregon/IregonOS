@@ -1,3 +1,5 @@
+https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c
+
 #include <drivers/vga.h>
 
 using namespace iregonos::common;
