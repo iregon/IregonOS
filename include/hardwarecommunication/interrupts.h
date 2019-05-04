@@ -1,12 +1,12 @@
-#ifndef __MYOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
-#define __MYOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
+#ifndef __iregonos__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
+#define __iregonos__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
 
 #include <gdt.h>
 #include <common/types.h>
 #include <hardwarecommunication/port.h>
 
 
- namespace myos
+namespace iregonos
 {
     namespace hardwarecommunication
     {
@@ -14,12 +14,12 @@
 
         class InterruptHandler {
         protected:
-            myos::common::uint8_t InterruptNumber;
+            iregonos::common::uint8_t InterruptNumber;
             InterruptManager* interruptManager;
-            InterruptHandler(InterruptManager* interruptManager, myos::common::uint8_t InterruptNumber);
+            InterruptHandler(InterruptManager* interruptManager, iregonos::common::uint8_t InterruptNumber);
             ~InterruptHandler();
         public:
-            virtual myos::common::uint32_t HandleInterrupt(myos::common::uint32_t esp);
+            virtual iregonos::common::uint32_t HandleInterrupt(iregonos::common::uint32_t esp);
         };
         
         
@@ -32,25 +32,25 @@
             InterruptHandler* handlers[256];
             
             struct GateDescriptor {
-                myos::common::uint16_t handlerAddressLowBits;
-                myos::common::uint16_t gdt_codeSegmentSelector;
-                myos::common::uint8_t reserved;
-                myos::common::uint8_t access;
-                myos::common::uint16_t handlerAddressHighBits;
+                iregonos::common::uint16_t handlerAddressLowBits;
+                iregonos::common::uint16_t gdt_codeSegmentSelector;
+                iregonos::common::uint8_t reserved;
+                iregonos::common::uint8_t access;
+                iregonos::common::uint16_t handlerAddressHighBits;
             } __attribute__((packed));
 
             static GateDescriptor interruptDescriptorTable[256];
 
             struct InterruptDescriptorTablePointer {
-                myos::common::uint16_t size;
-                myos::common::uint32_t base;
+                iregonos::common::uint16_t size;
+                iregonos::common::uint32_t base;
             } __attribute__((packed));
 
-            myos::common::uint16_t hardwareInterruptOffset;
+            iregonos::common::uint16_t hardwareInterruptOffset;
             
-            static void SetInterruptDescriptorTableEntry(myos::common::uint8_t interrupt,
-                myos::common::uint16_t codeSegmentSelectorOffset, void (*handler)(),
-                myos::common::uint8_t DescriptorPrivilegeLevel, myos::common::uint8_t DescriptorType);
+            static void SetInterruptDescriptorTableEntry(iregonos::common::uint8_t interrupt,
+                iregonos::common::uint16_t codeSegmentSelectorOffset, void (*handler)(),
+                iregonos::common::uint8_t DescriptorPrivilegeLevel, iregonos::common::uint8_t DescriptorType);
 
 
             static void InterruptIgnore();
@@ -94,9 +94,9 @@
             static void HandleException0x12();
             static void HandleException0x13();
 
-            static myos::common::uint32_t HandleInterrupt(myos::common::uint8_t interrupt, myos::common::uint32_t esp);
+            static iregonos::common::uint32_t HandleInterrupt(iregonos::common::uint8_t interrupt, iregonos::common::uint32_t esp);
             
-            myos::common::uint32_t DoHandleInterrupt(myos::common::uint8_t interrupt, myos::common::uint32_t esp);
+            iregonos::common::uint32_t DoHandleInterrupt(iregonos::common::uint8_t interrupt, iregonos::common::uint32_t esp);
 
             Port8BitSlow programmableInterruptControllerMasterCommandPort;
             Port8BitSlow programmableInterruptControllerMasterDataPort;
@@ -104,9 +104,9 @@
             Port8BitSlow programmableInterruptControllerSlaveDataPort;
 
         public:
-            InterruptManager(myos::common::uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable);
+            InterruptManager(iregonos::common::uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable);
             ~InterruptManager();
-            myos::common::uint16_t HardwareInterruptOffset();
+            iregonos::common::uint16_t HardwareInterruptOffset();
             void Activate();
             void Deactivate();
         };

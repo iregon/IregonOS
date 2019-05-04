@@ -5,10 +5,10 @@
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 
- using namespace myos;
-using namespace myos::common;
-using namespace myos::drivers;
-using namespace myos::hardwarecommunication;
+ using namespace iregonos;
+using namespace iregonos::common;
+using namespace iregonos::drivers;
+using namespace iregonos::hardwarecommunication;
 
 void printf(char* str) {
     static uint16_t* videoMemory = (uint16_t*)0xb8000;

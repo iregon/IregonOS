@@ -1,7 +1,7 @@
-#ifndef __MYOS__DRIVERS__DRIVER_H
-#define __MYOS__DRIVERS__DRIVER_H
+#ifndef __iregonos__DRIVERS__DRIVER_H
+#define __iregonos__DRIVERS__DRIVER_H
 
-namespace myos
+namespace iregonos
 {
     namespace drivers
     {

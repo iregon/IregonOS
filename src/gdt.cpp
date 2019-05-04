@@ -1,8 +1,8 @@
 // https://it.wikipedia.org/wiki/Global_Descriptor_Table
 
 #include <gdt.h>
-using namespace myos;
-using namespace myos::common;
+using namespace iregonos;
+using namespace iregonos::common;
 
 GlobalDescriptorTable::GlobalDescriptorTable()
     : nullSegmentSelector(0, 0, 0),

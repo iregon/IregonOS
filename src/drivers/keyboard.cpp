@@ -1,8 +1,8 @@
 #include <drivers/keyboard.h>
 
-using namespace myos::common;
-using namespace myos::drivers;
-using namespace myos::hardwarecommunication;
+using namespace iregonos::common;
+using namespace iregonos::drivers;
+using namespace iregonos::hardwarecommunication;
 
 KeyboardEventHandler::KeyboardEventHandler() {}
 
@@ -86,6 +86,9 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp) {
             case 0x33: handler->OnKeyDown(','); break;
             case 0x34: handler->OnKeyDown('.'); break;
             case 0x35: handler->OnKeyDown('-'); break;
+            
+            // keys to ignore
+            case 0x45: break;
             
             /* TODO manage shift and capslock
             // keys to ignore

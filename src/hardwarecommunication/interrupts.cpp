@@ -1,7 +1,7 @@
 #include <hardwarecommunication/interrupts.h>
 
-using namespace myos::common;
-using namespace myos::hardwarecommunication;
+using namespace iregonos::common;
+using namespace iregonos::hardwarecommunication;
 
 void printf(char* str);
 void printfHex(uint8_t);
