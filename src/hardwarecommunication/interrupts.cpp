@@ -1,5 +1,6 @@
 #include <hardwarecommunication/interrupts.h>
 
+using namespace iregonos;
 using namespace iregonos::common;
 using namespace iregonos::hardwarecommunication;
 
@@ -46,11 +47,13 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
 
 
 InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset,
-                                   GlobalDescriptorTable *globalDescriptorTable)
+                                   GlobalDescriptorTable *globalDescriptorTable,
+                                   TaskManager* taskManager)
         : programmableInterruptControllerMasterCommandPort(0x20),
           programmableInterruptControllerMasterDataPort(0x21),
           programmableInterruptControllerSlaveCommandPort(0xA0),
           programmableInterruptControllerSlaveDataPort(0xA1) {
+    this->taskManager = taskManager;
     this->hardwareInterruptOffset = hardwareInterruptOffset;
     uint32_t CodeSegment = globalDescriptorTable->CodeSegmentSelector();
 
@@ -177,7 +180,11 @@ uint32_t InterruptManager::DoHandleInterrupt(uint8_t interrupt,
         printf("UNHANDLED INTERRUPT 0x");
         printfHex(interrupt);
     }
-
+    
+    if(interrupt == hardwareInterruptOffset) {
+        esp = (uint32_t)taskManager->Schedule((CPUState*)esp);
+    }
+    
     // hardware interrupts must be acknowledged
     if (hardwareInterruptOffset <= interrupt && interrupt < hardwareInterruptOffset + 16) {
         programmableInterruptControllerMasterCommandPort.Write(0x20);

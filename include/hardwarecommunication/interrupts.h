@@ -2,6 +2,7 @@
 #define __IREGONOS__HARDWARECOMMUNICATION__INTERRUPTMANAGER_H
 
 #include <gdt.h>
+#include <multitasking.h>
 #include <common/types.h>
 #include <hardwarecommunication/port.h>
 
@@ -33,6 +34,7 @@ namespace iregonos {
 
             static InterruptManager *ActiveInterruptManager;
             InterruptHandler *handlers[256];
+            TaskManager *taskManager;
 
             struct GateDescriptor {
                 iregonos::common::uint16_t handlerAddressLowBits;
@@ -147,7 +149,8 @@ namespace iregonos {
 
         public:
             InterruptManager(iregonos::common::uint16_t hardwareInterruptOffset,
-                             GlobalDescriptorTable *globalDescriptorTable);
+                             GlobalDescriptorTable *globalDescriptorTable,
+                             iregonos::TaskManager* taskManager);
 
             ~InterruptManager();
 

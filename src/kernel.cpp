@@ -8,8 +8,9 @@
 #include <drivers/vga.h>
 #include <gui/desktop.h>
 #include <gui/window.h>
+#include <multitasking.h>
 
-#define GRAPHICSMODE
+// #define GRAPHICSMODE
 
 using namespace iregonos;
 using namespace iregonos::common;
@@ -120,6 +121,16 @@ public:
     }
 };
 
+// Task for testing
+void taskA() {
+    while(true)
+        printf("A");
+}
+void taskB() {
+    while(true)
+        printf("B");
+}
+
 typedef void (*constructor)();
 
 extern "C" constructor start_ctors;
@@ -134,7 +145,14 @@ extern "C" void kernelMain(const void *multiboot_structure,
     printf("IregonOS\nAlessandro Tornesello --- https://github.com/iregon/IregonOS\n");
     
     GlobalDescriptorTable gdt;
-    InterruptManager interrupts(0x20, &gdt);
+    
+    TaskManager taskManager;
+    Task task1(&gdt, taskA);
+    Task task2(&gdt, taskB);
+    taskManager.AddTask(&task1);
+    taskManager.AddTask(&task2);
+
+     InterruptManager interrupts(0x20, &gdt, &taskManager);
 
     printf("Initializing Hardware, Stage 1\n");
     
