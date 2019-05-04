@@ -1,8 +1,8 @@
 #include <hardwarecommunication/pci.h>
 
-using namespace myos::common;
-using namespace myos::drivers;
-using namespace myos::hardwarecommunication;
+using namespace iregonos::common;
+using namespace iregonos::drivers;
+using namespace iregonos::hardwarecommunication;
 
 PeripheralComponentInterconnectDeviceDescriptor::PeripheralComponentInterconnectDeviceDescriptor() {
 }

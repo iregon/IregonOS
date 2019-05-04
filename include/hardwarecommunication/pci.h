@@ -6,26 +6,26 @@
 #include <common/types.h>
 #include <hardwarecommunication/interrupts.h>
 
-namespace myos {
+namespace iregonos {
     namespace hardwarecommunication {
 
         class PeripheralComponentInterconnectDeviceDescriptor {
         public:
-            myos::common::uint32_t portBase;
-            myos::common::uint32_t interrupt;
+            iregonos::common::uint32_t portBase;
+            iregonos::common::uint32_t interrupt;
 
-            myos::common::uint16_t bus;
-            myos::common::uint16_t device;
-            myos::common::uint16_t function;
+            iregonos::common::uint16_t bus;
+            iregonos::common::uint16_t device;
+            iregonos::common::uint16_t function;
 
-            myos::common::uint16_t vendor_id;
-            myos::common::uint16_t device_id;
+            iregonos::common::uint16_t vendor_id;
+            iregonos::common::uint16_t device_id;
 
-            myos::common::uint8_t class_id;
-            myos::common::uint8_t subclass_id;
-            myos::common::uint8_t interface_id;
+            iregonos::common::uint8_t class_id;
+            iregonos::common::uint8_t subclass_id;
+            iregonos::common::uint8_t interface_id;
 
-            myos::common::uint8_t revision;
+            iregonos::common::uint8_t revision;
 
             PeripheralComponentInterconnectDeviceDescriptor();
 
@@ -43,20 +43,20 @@ namespace myos {
 
             ~PeripheralComponentInterconnectController();
 
-            myos::common::uint32_t
-            Read(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function,
-                 myos::common::uint32_t registeroffset);
+            iregonos::common::uint32_t
+            Read(iregonos::common::uint16_t bus, iregonos::common::uint16_t device, iregonos::common::uint16_t function,
+                 iregonos::common::uint32_t registeroffset);
 
-            void Write(myos::common::uint16_t bus, myos::common::uint16_t device, myos::common::uint16_t function,
-                       myos::common::uint32_t registeroffset, myos::common::uint32_t value);
+            void Write(iregonos::common::uint16_t bus, iregonos::common::uint16_t device, iregonos::common::uint16_t function,
+                       iregonos::common::uint32_t registeroffset, iregonos::common::uint32_t value);
 
-            bool DeviceHasFunctions(myos::common::uint16_t bus, myos::common::uint16_t device);
+            bool DeviceHasFunctions(iregonos::common::uint16_t bus, iregonos::common::uint16_t device);
 
-            void SelectDrivers(myos::drivers::DriverManager *driverManager);
+            void SelectDrivers(iregonos::drivers::DriverManager *driverManager);
 
             PeripheralComponentInterconnectDeviceDescriptor
-            GetDeviceDescriptor(myos::common::uint16_t bus, myos::common::uint16_t device,
-                                myos::common::uint16_t function);
+            GetDeviceDescriptor(iregonos::common::uint16_t bus, iregonos::common::uint16_t device,
+                                iregonos::common::uint16_t function);
         };
     }
 }

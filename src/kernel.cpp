@@ -11,7 +11,7 @@ using namespace iregonos::common;
 using namespace iregonos::drivers;
 using namespace iregonos::hardwarecommunication;
 
-void cleanScreen();
+void cleanScreen(int length, int height);
 
 void deleteCharacter(int x, int y);
 
@@ -41,7 +41,7 @@ void printf(char *str) {
 
         // Clean screen
         if (y >= 25) {
-            cleanScreen();
+            cleanScreen(80, 25);
             // Reset cursor
             x = 0;
             y = 0;
@@ -49,15 +49,15 @@ void printf(char *str) {
     }
 }
 
-void cleanScreen() {
-    static uint16_t *videoMemory = (uint16_t *) 0xb8000;
-
-    for (int y = 0; y < 25; y++)
-        for (int x = 0; x < 80; x++)
+void cleanScreen(int length, int height) {
+    for (int y = 0; y < height; y++)
+        for (int x = 0; x < length; x++)
             deleteCharacter(x, y);
 }
 
 void deleteCharacter(int x, int y) {
+	static uint16_t *videoMemory = (uint16_t *) 0xb8000;
+	
     videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | ' ';
 }
 
@@ -108,9 +108,7 @@ public:
                                   | (VideoMemory[80 * y + x] & 0xF000) >> 4
                                   | (VideoMemory[80 * y + x] & 0x00FF);
     }
-
 };
-
 
 typedef void (*constructor)();
 
