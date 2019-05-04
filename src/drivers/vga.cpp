@@ -1,4 +1,4 @@
-https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c
+// https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c
 
 #include <drivers/vga.h>
 
@@ -110,17 +110,37 @@ uint8_t* VideoGraphicsArray::GetFrameBufferSegment() {
     }
 }
 
-void VideoGraphicsArray::PutPixel(uint32_t x, uint32_t y,  uint8_t colorIndex) {
+void VideoGraphicsArray::PutPixel(uint32_t x, 
+                                  uint32_t y,  
+                                  uint8_t colorIndex) {
     uint8_t* pixelAddress = GetFrameBufferSegment() + 320 * y + x;
     *pixelAddress = colorIndex;
 }
 
-uint8_t VideoGraphicsArray::GetColorIndex(uint8_t r, uint8_t g, uint8_t b) {
+uint8_t VideoGraphicsArray::GetColorIndex(uint8_t r, 
+                                          uint8_t g, 
+                                          uint8_t b) {
     if(r == 0x00, g == 0x00, b == 0xA8)
         return 0x01;
     return 0x00;
 }
 
-void VideoGraphicsArray::PutPixel(uint32_t x, uint32_t y,  uint8_t r, uint8_t g, uint8_t b) {
+void VideoGraphicsArray::PutPixel(uint32_t x, 
+                                  uint32_t y,  
+                                  uint8_t r, 
+                                  uint8_t g, 
+                                  uint8_t b) {
     PutPixel(x,y, GetColorIndex(r,g,b));
+}
+
+void VideoGraphicsArray::FillRectangle(uint32_t x, 
+                                       uint32_t y, 
+                                       uint32_t w, 
+                                       uint32_t h,   
+                                       uint8_t r, 
+                                       uint8_t g, 
+                                       uint8_t b ) {
+    for(int32_t Y = y; Y < y+h; Y++)
+        for(int32_t X = x; X < x+w; X++)
+            PutPixel(X, Y, r, g, b);
 }
