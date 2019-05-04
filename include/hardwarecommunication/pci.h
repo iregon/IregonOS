@@ -8,17 +8,15 @@
 
 namespace iregonos {
     namespace hardwarecommunication {
-        enum BaseAddressRegisterType
-        {
+        enum BaseAddressRegisterType {
             MemoryMapping = 0,
             InputOutput = 1
         };
 
-        class BaseAddressRegister
-        {
+        class BaseAddressRegister {
         public:
             bool prefetchable;
-            iregonos::common::uint8_t* address;
+            iregonos::common::uint8_t *address;
             iregonos::common::uint32_t size;
             BaseAddressRegisterType type;
         };
@@ -57,33 +55,33 @@ namespace iregonos {
 
             ~PeripheralComponentInterconnectController();
 
-            iregonos::common::uint32_t Read(iregonos::common::uint16_t bus, 
-                                            iregonos::common::uint16_t device, 
+            iregonos::common::uint32_t Read(iregonos::common::uint16_t bus,
+                                            iregonos::common::uint16_t device,
                                             iregonos::common::uint16_t function,
                                             iregonos::common::uint32_t registeroffset);
 
-            void Write(iregonos::common::uint16_t bus, 
-                       iregonos::common::uint16_t device, 
+            void Write(iregonos::common::uint16_t bus,
+                       iregonos::common::uint16_t device,
                        iregonos::common::uint16_t function,
-                       iregonos::common::uint32_t registeroffset, 
+                       iregonos::common::uint32_t registeroffset,
                        iregonos::common::uint32_t value);
 
-            bool DeviceHasFunctions(iregonos::common::uint16_t bus, 
+            bool DeviceHasFunctions(iregonos::common::uint16_t bus,
                                     iregonos::common::uint16_t device);
 
-            void SelectDrivers(iregonos::drivers::DriverManager* driverManager, 
-                               iregonos::hardwarecommunication::InterruptManager* interrupts);
-            
-            iregonos::drivers::Driver* GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev,
-                                                 iregonos::hardwarecommunication::InterruptManager* interrupts);
+            void SelectDrivers(iregonos::drivers::DriverManager *driverManager,
+                               iregonos::hardwarecommunication::InterruptManager *interrupts);
 
-            PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(iregonos::common::uint16_t bus, 
+            iregonos::drivers::Driver *GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev,
+                                                 iregonos::hardwarecommunication::InterruptManager *interrupts);
+
+            PeripheralComponentInterconnectDeviceDescriptor GetDeviceDescriptor(iregonos::common::uint16_t bus,
                                                                                 iregonos::common::uint16_t device,
                                                                                 iregonos::common::uint16_t function);
-            
-            BaseAddressRegister GetBaseAddressRegister(iregonos::common::uint16_t bus, 
-                                                       iregonos::common::uint16_t device, 
-                                                       iregonos::common::uint16_t function, 
+
+            BaseAddressRegister GetBaseAddressRegister(iregonos::common::uint16_t bus,
+                                                       iregonos::common::uint16_t device,
+                                                       iregonos::common::uint16_t function,
                                                        iregonos::common::uint16_t bar);
         };
     }

@@ -30,9 +30,9 @@ namespace iregonos {
             iregonos::common::uint8_t buttons;
 
             MouseEventHandler *handler;
-            
+
         public:
-            MouseDriver(iregonos::hardwarecommunication::InterruptManager *manager, 
+            MouseDriver(iregonos::hardwarecommunication::InterruptManager *manager,
                         MouseEventHandler *handler);
 
             ~MouseDriver();

@@ -7,7 +7,7 @@
 
 namespace iregonos {
     namespace gui {
-        
+
         class Widget : public iregonos::drivers::KeyboardEventHandler {
         protected:
             Widget *parent;
@@ -45,17 +45,17 @@ namespace iregonos {
             virtual void ModelToScreen(common::int32_t &x,
                                        common::int32_t &y);
 
-            virtual bool ContainsCoordinate(common::int32_t x, 
+            virtual bool ContainsCoordinate(common::int32_t x,
                                             common::int32_t y);
-            
-            virtual void Draw(common::GraphicsContext* gc);
-            
-            virtual void OnMouseDown(common::int32_t x, 
-                                     common::int32_t y, 
+
+            virtual void Draw(common::GraphicsContext *gc);
+
+            virtual void OnMouseDown(common::int32_t x,
+                                     common::int32_t y,
                                      common::uint8_t button);
-            
-            virtual void OnMouseUp(common::int32_t x, 
-                                   common::int32_t y, 
+
+            virtual void OnMouseUp(common::int32_t x,
+                                   common::int32_t y,
                                    common::uint8_t button);
 
             virtual void OnMouseMove(common::int32_t oldx,
@@ -85,15 +85,15 @@ namespace iregonos {
             virtual void GetFocus(Widget *widget);
 
             virtual void Draw(common::GraphicsContext *gc);
-            
-            virtual bool AddChild(Widget* child);
+
+            virtual bool AddChild(Widget *child);
 
             virtual void OnMouseDown(common::int32_t x,
-                                     common::int32_t y, 
+                                     common::int32_t y,
                                      common::uint8_t button);
 
             virtual void OnMouseUp(common::int32_t x,
-                                   common::int32_t y, 
+                                   common::int32_t y,
                                    common::uint8_t button);
 
             virtual void OnMouseMove(common::int32_t oldx,
