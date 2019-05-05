@@ -12,7 +12,7 @@
 #include <gui/window.h>
 #include <multitasking.h>
 
-// #define GRAPHICSMODE
+//#define GRAPHICSMODE
 
 using namespace iregonos;
 using namespace iregonos::common;
@@ -219,7 +219,7 @@ extern "C" void kernelMain(const void *multiboot_structure,
         
     drvManager.AddDriver(&mouse);
     
-    printf("\n### PCI\n");
+    printf("\n");
     PeripheralComponentInterconnectController PCIController;
     PCIController.SelectDrivers(&drvManager, &interrupts);
     
@@ -231,16 +231,16 @@ extern "C" void kernelMain(const void *multiboot_structure,
     printf("\nInitializing Hardware, Stage 3\n");
     
     #ifdef GRAPHICSMODE
-        vga.SetMode(320,200,8);
+        vga.SetMode(320, 200, 8);
         
-        Window win1(&desktop, 10,10,20,20, 0xA8,0x00,0x00);
+        Window win1(&desktop, 10, 10, 20, 20, 0xA8, 0x00, 0x00);
         desktop.AddChild(&win1);
         
-        Window win2(&desktop, 40,15,30,30, 0x00,0xA8,0x00);
+        Window win2(&desktop, 40, 15, 30, 30, 0x00, 0xA8, 0x00);
         desktop.AddChild(&win2);
     #endif
     
-    // BEGIN Networking
+    // BEGIN Networking testing
     amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
     eth0->Send((uint8_t*)"Hello Network", 13);
     // END
