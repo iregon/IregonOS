@@ -1,4 +1,5 @@
 #include <hardwarecommunication/pci.h>
+#include <drivers/amd_am79c973.h>
 
 using namespace iregonos::common;
 using namespace iregonos::drivers;
@@ -68,12 +69,13 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager *dri
                     BaseAddressRegister bar = GetBaseAddressRegister(bus, device, function, barNum);
                     if(bar.address && (bar.type == InputOutput))
                         dev.portBase = (uint32_t)bar.address;
-
-                    Driver* driver = GetDriver(dev, interrupts);
+                }
+                
+                Driver* driver = GetDriver(dev, interrupts);
                     if(driver != 0)
                         driverManager->AddDriver(driver);
-                }
-
+                
+                // BEGIN print pci info
                 printf("PCI BUS ");
                 printfHex(bus & 0xFF);
 
@@ -90,6 +92,7 @@ void PeripheralComponentInterconnectController::SelectDrivers(DriverManager *dri
                 printfHex((dev.device_id & 0xFF00) >> 8);
                 printfHex(dev.device_id & 0xFF);
                 printf("\n");
+                // END
             }
         }
     }
@@ -126,8 +129,6 @@ BaseAddressRegister PeripheralComponentInterconnectController::GetBaseAddressReg
     return result;
 }
 
-
-
 Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponentInterconnectDeviceDescriptor dev, 
                                                              InterruptManager* interrupts) {
     Driver *driver = 0;
@@ -136,12 +137,11 @@ Driver* PeripheralComponentInterconnectController::GetDriver(PeripheralComponent
         case 0x1022: // AMD
             switch(dev.device_id) {
                 case 0x2000: // am79c973
-                    /*
                     driver = (amd_am79c973*)MemoryManager::activeMemoryManager->malloc(sizeof(amd_am79c973));
                     if(driver != 0)
-                        new (driver) amd_am79c973(...);
-                    */
+                        new (driver) amd_am79c973(&dev, interrupts);
                     printf("AMD am79c973 ");
+                    return driver;
                     break;
             }
             break;

@@ -7,6 +7,7 @@
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
+#include <drivers/amd_am79c973.h>
 #include <gui/desktop.h>
 #include <gui/window.h>
 #include <multitasking.h>
@@ -81,6 +82,18 @@ void printfHex(uint8_t key) {
     printf(foo);
 }
 
+void printfHex16(uint16_t key) {
+    printfHex((key >> 8) & 0xFF);
+    printfHex( key & 0xFF);
+}
+
+void printfHex32(uint32_t key) {
+    printfHex((key >> 24) & 0xFF);
+    printfHex((key >> 16) & 0xFF);
+    printfHex((key >> 8) & 0xFF);
+    printfHex( key & 0xFF);
+}
+
 class PrintfKeyboardEventHandler : public KeyboardEventHandler {
 public:
     void OnKeyDown(char c) {
@@ -143,7 +156,7 @@ extern "C" void callConstructors() {
 
 extern "C" void kernelMain(const void *multiboot_structure, 
                            uint32_t /*multiboot_magic*/) {
-    printf("IregonOS\nAlessandro Tornesello --- https://github.com/iregon/IregonOS\n");
+    printf("IregonOS\nAlessandro Tornesello --- https://github.com/iregon/IregonOS\n\n");
     
     GlobalDescriptorTable gdt;
     
@@ -205,16 +218,17 @@ extern "C" void kernelMain(const void *multiboot_structure,
     #endif
         
     drvManager.AddDriver(&mouse);
-
+    
+    printf("\n### PCI\n");
     PeripheralComponentInterconnectController PCIController;
     PCIController.SelectDrivers(&drvManager, &interrupts);
     
     VideoGraphicsArray vga;
     
-    printf("Initializing Hardware, Stage 2\n");
+    printf("\nInitializing Hardware, Stage 2\n");
     drvManager.ActivateAll();
 
-    printf("Initializing Hardware, Stage 3\n");
+    printf("\nInitializing Hardware, Stage 3\n");
     
     #ifdef GRAPHICSMODE
         vga.SetMode(320,200,8);
@@ -225,7 +239,12 @@ extern "C" void kernelMain(const void *multiboot_structure,
         Window win2(&desktop, 40,15,30,30, 0x00,0xA8,0x00);
         desktop.AddChild(&win2);
     #endif
-        
+    
+    // BEGIN Networking
+    amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
+    eth0->Send((uint8_t*)"Hello Network", 13);
+    // END
+    
     interrupts.Activate();
     
     while(1) {
