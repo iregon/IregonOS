@@ -9,7 +9,7 @@ Desktop::Desktop(common::int32_t w,
                  common::uint8_t r, 
                  common::uint8_t g, 
                  common::uint8_t b)
-:   CompositeWidget(0,0,0, w,h,r,g,b),
+:   CompositeWidget(0, 0, 0, w, h, r, g, b),
     MouseEventHandler() {
     MouseX = w/2;
     MouseY = h/2;
