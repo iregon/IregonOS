@@ -23,7 +23,7 @@ uint32_t SyscallHandler::HandleInterrupt(uint32_t esp) {
     switch(cpu->eax)
     {
         case 4:
-            // ebx contains ascii number to print
+            // ebx contains ascii number of character to print
             printf((char*)cpu->ebx);
             break;
             

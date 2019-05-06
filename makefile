@@ -26,6 +26,7 @@ objects = obj/loader.o \
           obj/gui/widget.o \
           obj/gui/window.o \
           obj/gui/desktop.o \
+          obj/net/etherframe.o \
           obj/kernel.o
 
 

@@ -5,6 +5,28 @@ using namespace iregonos::common;
 using namespace iregonos::drivers;
 using namespace iregonos::hardwarecommunication;
 
+RawDataHandler::RawDataHandler(amd_am79c973* backend) {
+    this->backend = backend;
+    backend->SetHandler(this);
+}
+
+RawDataHandler::~RawDataHandler() {
+    backend->SetHandler(0);
+}
+
+bool RawDataHandler::OnRawDataReceived(uint8_t* buffer,
+                                       uint32_t size) {
+    return false;
+}
+
+void RawDataHandler::Send(uint8_t* buffer,
+                          uint32_t size) {
+    backend->Send(buffer, size);
+}
+
+void printf(char*);
+void printfHex(uint8_t);
+
 amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
                            InterruptManager *interrupts)
         : Driver(),
@@ -19,7 +41,8 @@ amd_am79c973::amd_am79c973(PeripheralComponentInterconnectDeviceDescriptor *dev,
 
     currentSendBuffer = 0;
     currentRecvBuffer = 0;
-
+    this->handler = 0;
+    
     uint64_t MAC0 = MACAddress0Port.Read() % 256;
     uint64_t MAC1 = MACAddress0Port.Read() / 256;
     uint64_t MAC2 = MACAddress2Port.Read() % 256;
@@ -158,14 +181,28 @@ void amd_am79c973::Receive() {
                 size -= 4;
 
             uint8_t *buffer = (uint8_t * )(recvBufferDescr[currentRecvBuffer].address);
+        
+            if(handler != 0)
+                if(handler->OnRawDataReceived(buffer, size))
+                    Send(buffer, size);
 
+            /*
             for (int i = 0; i < size; i++) {
                 printfHex(buffer[i]);
                 printf(" ");
             }
+            */
         }
 
         recvBufferDescr[currentRecvBuffer].flags2 = 0;
         recvBufferDescr[currentRecvBuffer].flags = 0x8000F7FF;
     }
+}
+
+void amd_am79c973::SetHandler(RawDataHandler* handler) {
+    this->handler = handler;
+}
+
+uint64_t amd_am79c973::GetMACAddress() {
+    return initBlock.physicalAddress;
 }
