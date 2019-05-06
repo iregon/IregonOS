@@ -60,6 +60,8 @@ HandleInterruptRequest 0x0E
 HandleInterruptRequest 0x0F
 HandleInterruptRequest 0x31
 
+HandleInterruptRequest 0x80 # System calls
+
 int_bottom:
 
     # save registers

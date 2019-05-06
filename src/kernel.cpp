@@ -2,6 +2,7 @@
 #include <gdt.h>
 #include <memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
+#include <syscalls.h>
 #include <hardwarecommunication/pci.h>
 #include <drivers/driver.h>
 #include <drivers/keyboard.h>
@@ -136,15 +137,19 @@ public:
     }
 };
 
+void sysprintf(char* str) {
+    asm("int $0x80" : : "a" (4), "b" (str));
+}
+
 // Task for testing
 void taskA() {
     while (true)
-        printf("A");
+        sysprintf("A");
 }
 
 void taskB() {
     while (true)
-        printf("B");
+        sysprintf("B");
 }
 
 typedef void (*constructor)();
@@ -184,14 +189,13 @@ extern "C" void kernelMain(const void *multiboot_structure,
 
     TaskManager taskManager;
     // Task for testing
-    /* 
     Task task1(&gdt, taskA);
     Task task2(&gdt, taskB);
     taskManager.AddTask(&task1);
     taskManager.AddTask(&task2);
-    */
 
     InterruptManager interrupts(0x20, &gdt, &taskManager);
+    SyscallHandler syscalls(&interrupts, 0x80);
 
     printf("Initializing Hardware, Stage 1\n");
 
@@ -228,7 +232,9 @@ extern "C" void kernelMain(const void *multiboot_structure,
     PCIController.SelectDrivers(&drvManager, &interrupts);
     // END
 
-    VideoGraphicsArray vga;
+    #ifdef GRAPHICSMODE
+        VideoGraphicsArray vga;
+    #endif
 
     printf("Initializing Hardware, Stage 2\n");
     drvManager.ActivateAll();
@@ -248,9 +254,11 @@ extern "C" void kernelMain(const void *multiboot_structure,
     printf("S-ATA primary master: ");
     AdvancedTechnologyAttachment ata0m(true, 0x1F0);
     ata0m.Identify();
-    ata0m.Write28(0, (uint8_t *) "http://www.AlgorithMan.de", 25);
+    /*
+    ata0m.Write28(0, (uint8_t *) "https://github.com/iregon/IregonOS", 34);
     ata0m.Flush();
-    ata0m.Read28(0, 25);
+    ata0m.Read28(0, 34);
+    */
 
     /*
     printf("\nS-ATA primary slave: ");
