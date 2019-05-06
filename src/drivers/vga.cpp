@@ -1,4 +1,9 @@
+// For example code and config, see:
 // https://files.osdev.org/mirrors/geezer/osd/graphics/modes.c
+
+// For theory, see:
+// https://wiki.osdev.org/VGA_Hardware              <--- List of register settings
+// http://www.osdever.net/FreeVGA/vga/crtcreg.htm   <--- CRT Controller Registers 
 
 #include <drivers/vga.h>
 

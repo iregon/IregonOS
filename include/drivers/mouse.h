@@ -19,10 +19,12 @@ namespace iregonos {
 
             virtual void OnMouseUp(iregonos::common::uint8_t button);
 
-            virtual void OnMouseMove(int x, int y);
+            virtual void OnMouseMove(int x, 
+                                     int y);
         };
 
-        class MouseDriver : public iregonos::hardwarecommunication::InterruptHandler, public Driver {
+        class MouseDriver 
+        : public iregonos::hardwarecommunication::InterruptHandler, public Driver {
             iregonos::hardwarecommunication::Port8Bit dataport;
             iregonos::hardwarecommunication::Port8Bit commandport;
             iregonos::common::uint8_t buffer[3];
