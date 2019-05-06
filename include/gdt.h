@@ -18,28 +18,32 @@ namespace iregonos {
             iregonos::common::uint8_t base_vhi;
 
         public:
-            SegmentDescriptor(iregonos::common::uint32_t base, 
-                              iregonos::common::uint32_t limit, 
+            SegmentDescriptor(iregonos::common::uint32_t base,
+                              iregonos::common::uint32_t limit,
                               iregonos::common::uint8_t type);
+
             iregonos::common::uint32_t Base();
+
             iregonos::common::uint32_t Limit();
         } __attribute__((packed));
 
-        private:
+    private:
         SegmentDescriptor nullSegmentSelector;
         SegmentDescriptor unusedSegmentSelector;
         SegmentDescriptor codeSegmentSelector;
         SegmentDescriptor dataSegmentSelector;
 
-        public:
+    public:
 
         GlobalDescriptorTable();
+
         ~GlobalDescriptorTable();
 
         iregonos::common::uint16_t CodeSegmentSelector();
+
         iregonos::common::uint16_t DataSegmentSelector();
     };
 
- }
+}
 
- #endif
+#endif

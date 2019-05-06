@@ -7,7 +7,7 @@
 
 namespace iregonos {
     namespace drivers {
-        
+
         class AdvancedTechnologyAttachment {
         protected:
             bool master;
@@ -21,21 +21,21 @@ namespace iregonos {
             hardwarecommunication::Port8Bit commandPort;
             hardwarecommunication::Port8Bit controlPort;
         public:
-            
+
             AdvancedTechnologyAttachment(bool master,
                                          common::uint16_t portBase);
-            
+
             ~AdvancedTechnologyAttachment();
-            
+
             void Identify();
-            
-            void Read28(common::uint32_t sectorNum, 
+
+            void Read28(common::uint32_t sectorNum,
                         int count = 512);
-            
+
             void Write28(common::uint32_t sectorNum,
-                         common::uint8_t* data,
+                         common::uint8_t *data,
                          common::uint32_t count);
-            
+
             void Flush();
         };
     }

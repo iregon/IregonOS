@@ -150,7 +150,7 @@ namespace iregonos {
         public:
             InterruptManager(iregonos::common::uint16_t hardwareInterruptOffset,
                              GlobalDescriptorTable *globalDescriptorTable,
-                             iregonos::TaskManager* taskManager);
+                             iregonos::TaskManager *taskManager);
 
             ~InterruptManager();
 

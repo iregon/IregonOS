@@ -21,10 +21,10 @@ using namespace iregonos::drivers;
 using namespace iregonos::hardwarecommunication;
 using namespace iregonos::gui;
 
-void cleanScreen(int length, 
+void cleanScreen(int length,
                  int height);
 
-void deleteCharacter(int x, 
+void deleteCharacter(int x,
                      int y);
 
 void printf(char *str) {
@@ -61,17 +61,17 @@ void printf(char *str) {
     }
 }
 
-void cleanScreen(int length, 
+void cleanScreen(int length,
                  int height) {
     for (int y = 0; y < height; y++)
         for (int x = 0; x < length; x++)
             deleteCharacter(x, y);
 }
 
-void deleteCharacter(int x, 
+void deleteCharacter(int x,
                      int y) {
-	static uint16_t *videoMemory = (uint16_t *) 0xb8000;
-	
+    static uint16_t *videoMemory = (uint16_t *) 0xb8000;
+
     videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | 0x20;
 }
 
@@ -85,14 +85,14 @@ void printfHex(uint8_t key) {
 
 void printfHex16(uint16_t key) {
     printfHex((key >> 8) & 0xFF);
-    printfHex( key & 0xFF);
+    printfHex(key & 0xFF);
 }
 
 void printfHex32(uint32_t key) {
     printfHex((key >> 24) & 0xFF);
     printfHex((key >> 16) & 0xFF);
     printfHex((key >> 8) & 0xFF);
-    printfHex( key & 0xFF);
+    printfHex(key & 0xFF);
 }
 
 class PrintfKeyboardEventHandler : public KeyboardEventHandler {
@@ -138,11 +138,12 @@ public:
 
 // Task for testing
 void taskA() {
-    while(true)
+    while (true)
         printf("A");
 }
+
 void taskB() {
-    while(true)
+    while (true)
         printf("B");
 }
 
@@ -155,32 +156,32 @@ extern "C" void callConstructors() {
         (*i)();
 }
 
-extern "C" void kernelMain(const void *multiboot_structure, 
+extern "C" void kernelMain(const void *multiboot_structure,
                            uint32_t /*multiboot_magic*/) {
     printf("IregonOS --- https://github.com/iregon/IregonOS\n");
-    
+
     GlobalDescriptorTable gdt;
-    
-    uint32_t* memupper = (uint32_t*)(((size_t)multiboot_structure) + 8);
-    size_t heap = 10*1024*1024;
-    MemoryManager memoryManager(heap, (*memupper)*1024 - heap - 10*1024);
-    
+
+    uint32_t *memupper = (uint32_t * )(((size_t) multiboot_structure) + 8);
+    size_t heap = 10 * 1024 * 1024;
+    MemoryManager memoryManager(heap, (*memupper) * 1024 - heap - 10 * 1024);
+
     // BEGIN Dynamic memory management
     printf("heap: 0x");
     printfHex((heap >> 24) & 0xFF);
     printfHex((heap >> 16) & 0xFF);
-    printfHex((heap >> 8 ) & 0xFF);
-    printfHex((heap      ) & 0xFF);
+    printfHex((heap >> 8) & 0xFF);
+    printfHex((heap) & 0xFF);
 
-    void* allocated = memoryManager.malloc(1024);
+    void *allocated = memoryManager.malloc(1024);
     printf("\nallocated: 0x");
-    printfHex(((size_t)allocated >> 24) & 0xFF);
-    printfHex(((size_t)allocated >> 16) & 0xFF);
-    printfHex(((size_t)allocated >> 8 ) & 0xFF);
-    printfHex(((size_t)allocated      ) & 0xFF);
+    printfHex(((size_t) allocated >> 24) & 0xFF);
+    printfHex(((size_t) allocated >> 16) & 0xFF);
+    printfHex(((size_t) allocated >> 8) & 0xFF);
+    printfHex(((size_t) allocated) & 0xFF);
     printf("\n");
     // END
-    
+
     TaskManager taskManager;
     // Task for testing
     /* 
@@ -189,68 +190,68 @@ extern "C" void kernelMain(const void *multiboot_structure,
     taskManager.AddTask(&task1);
     taskManager.AddTask(&task2);
     */
-    
+
     InterruptManager interrupts(0x20, &gdt, &taskManager);
 
     printf("Initializing Hardware, Stage 1\n");
-    
-    #ifdef GRAPHICSMODE
-        Desktop desktop(320,200, 0x00,0x00,0xA8);
-    #endif
+
+#ifdef GRAPHICSMODE
+    Desktop desktop(320,200, 0x00,0x00,0xA8);
+#endif
 
     DriverManager drvManager;
 
     // BEGIN Keyboard interrupt handler and driver
-    #ifdef GRAPHICSMODE
-        KeyboardDriver keyboard(&interrupts, &desktop);
-    #else
-        PrintfKeyboardEventHandler kbhandler;
-        KeyboardDriver keyboard(&interrupts, &kbhandler);
-    #endif
-        
+#ifdef GRAPHICSMODE
+    KeyboardDriver keyboard(&interrupts, &desktop);
+#else
+    PrintfKeyboardEventHandler kbhandler;
+    KeyboardDriver keyboard(&interrupts, &kbhandler);
+#endif
+
     drvManager.AddDriver(&keyboard);
     // END
 
     // BEGIN Mouse interrupt handler and driver
-    #ifdef GRAPHICSMODE
-        MouseDriver mouse(&interrupts, &desktop);
-    #else
-        MouseToConsole mousehandler;
-        MouseDriver mouse(&interrupts, &mousehandler);
-    #endif
-        
+#ifdef GRAPHICSMODE
+    MouseDriver mouse(&interrupts, &desktop);
+#else
+    MouseToConsole mousehandler;
+    MouseDriver mouse(&interrupts, &mousehandler);
+#endif
+
     drvManager.AddDriver(&mouse);
     // END
-    
+
     // BEGIN PCI
     PeripheralComponentInterconnectController PCIController;
     PCIController.SelectDrivers(&drvManager, &interrupts);
     // END
-    
+
     VideoGraphicsArray vga;
-    
+
     printf("Initializing Hardware, Stage 2\n");
     drvManager.ActivateAll();
 
     printf("Initializing Hardware, Stage 3\n");
-    
-    #ifdef GRAPHICSMODE
-        vga.SetMode(320, 200, 8);
-        
-        Window win1(&desktop, 10, 10, 20, 20, 0xA8, 0x00, 0x00);
-        desktop.AddChild(&win1);
-        
-        Window win2(&desktop, 40, 15, 30, 30, 0x00, 0xA8, 0x00);
-        desktop.AddChild(&win2);
-    #endif
-        
+
+#ifdef GRAPHICSMODE
+    vga.SetMode(320, 200, 8);
+
+    Window win1(&desktop, 10, 10, 20, 20, 0xA8, 0x00, 0x00);
+    desktop.AddChild(&win1);
+
+    Window win2(&desktop, 40, 15, 30, 30, 0x00, 0xA8, 0x00);
+    desktop.AddChild(&win2);
+#endif
+
     printf("S-ATA primary master: ");
     AdvancedTechnologyAttachment ata0m(true, 0x1F0);
     ata0m.Identify();
-    ata0m.Write28(0, (uint8_t*)"http://www.AlgorithMan.de", 25);
+    ata0m.Write28(0, (uint8_t *) "http://www.AlgorithMan.de", 25);
     ata0m.Flush();
     ata0m.Read28(0, 25);
-    
+
     /*
     printf("\nS-ATA primary slave: ");
     AdvancedTechnologyAttachment ata0s(false, 0x1F0);
@@ -266,17 +267,17 @@ extern "C" void kernelMain(const void *multiboot_structure,
 
     // third: 0x1E8
     // fourth: 0x168
-    
+
     // BEGIN Networking
-    amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
+    amd_am79c973 *eth0 = (amd_am79c973 * )(drvManager.drivers[2]);
     //eth0->Send((uint8_t*)"Hello Network", 13);
     // END
-    
+
     interrupts.Activate();
-    
-    while(1) {
-        #ifdef GRAPHICSMODE
-            desktop.Draw(&vga);
-        #endif
+
+    while (1) {
+#ifdef GRAPHICSMODE
+        desktop.Draw(&vga);
+#endif
     }
 }

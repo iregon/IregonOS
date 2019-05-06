@@ -1,4 +1,4 @@
- 
+
 #ifndef __IREGONOS__MULTITASKING_H
 #define __IREGONOS__MULTITASKING_H
 
@@ -6,7 +6,7 @@
 #include <gdt.h>
 
 namespace iregonos {
-    
+
     struct CPUState {
         common::uint32_t eax;
         common::uint32_t ebx;
@@ -29,40 +29,41 @@ namespace iregonos {
         common::uint32_t cs;
         common::uint32_t eflags;
         common::uint32_t esp;
-        common::uint32_t ss;        
+        common::uint32_t ss;
     } __attribute__((packed));
-    
-    
+
+
     class Task {
-    friend class TaskManager;
+        friend class TaskManager;
+
     private:
         common::uint8_t stack[4096]; // 4 KiB
-        
-        CPUState* cpustate;
+
+        CPUState *cpustate;
     public:
         Task(GlobalDescriptorTable *gdt,
              void entrypoint());
-        
+
         ~Task();
     };
-    
-    
+
+
     class TaskManager {
     private:
-        Task* tasks[256];
-        
+        Task *tasks[256];
+
         int numTasks;
-        
+
         int currentTask;
-        
+
     public:
         TaskManager();
-        
+
         ~TaskManager();
-        
-        bool AddTask(Task* task);
-        
-        CPUState* Schedule(CPUState* cpustate);
+
+        bool AddTask(Task *task);
+
+        CPUState *Schedule(CPUState *cpustate);
     };
 }
 
