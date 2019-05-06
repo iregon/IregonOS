@@ -4,7 +4,7 @@
 # Part 2
 # sudo apt-get install VirtualBox grub-legacy xorriso
 
-GCCPARAMS = -m32 -Iinclude -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings
+GCCPARAMS = -m32 -Iinclude -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore -Wno-write-strings -fpermissive
 ASPARAMS = --32
 LDPARAMS = -melf_i386 -s
 
@@ -21,6 +21,7 @@ objects = obj/loader.o \
           obj/drivers/keyboard.o \
           obj/drivers/mouse.o \
           obj/drivers/vga.o \
+          obj/drivers/ata.o \
           obj/gui/widget.o \
           obj/gui/window.o \
           obj/gui/desktop.o \

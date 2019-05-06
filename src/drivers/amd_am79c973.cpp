@@ -130,15 +130,15 @@ void amd_am79c973::Send(uint8_t* buffer, int size)
     int sendDescriptor = currentSendBuffer;
     currentSendBuffer = (currentSendBuffer + 1) % 8;
 
-     if(size > 1518)
+    if(size > 1518)
         size = 1518;
 
-     for(uint8_t *src = buffer + size -1,
+    for(uint8_t *src = buffer + size -1,
                 *dst = (uint8_t*)(sendBufferDescr[sendDescriptor].address + size -1);
                 src >= buffer; src--, dst--)
         *dst = *src;
 
-     sendBufferDescr[sendDescriptor].avail = 0;
+    sendBufferDescr[sendDescriptor].avail = 0;
     sendBufferDescr[sendDescriptor].flags2 = 0;
     sendBufferDescr[sendDescriptor].flags = 0x8300F000
                                           | ((uint16_t)((-size) & 0xFFF));

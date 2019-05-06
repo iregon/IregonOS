@@ -7,6 +7,7 @@
 #include <drivers/keyboard.h>
 #include <drivers/mouse.h>
 #include <drivers/vga.h>
+#include <drivers/ata.h>
 #include <drivers/amd_am79c973.h>
 #include <gui/desktop.h>
 #include <gui/window.h>
@@ -71,7 +72,7 @@ void deleteCharacter(int x,
                      int y) {
 	static uint16_t *videoMemory = (uint16_t *) 0xb8000;
 	
-    videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | ' ';
+    videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | 0x20;
 }
 
 void printfHex(uint8_t key) {
@@ -156,7 +157,7 @@ extern "C" void callConstructors() {
 
 extern "C" void kernelMain(const void *multiboot_structure, 
                            uint32_t /*multiboot_magic*/) {
-    printf("IregonOS\nAlessandro Tornesello --- https://github.com/iregon/IregonOS\n\n");
+    printf("IregonOS --- https://github.com/iregon/IregonOS\n");
     
     GlobalDescriptorTable gdt;
     
@@ -199,7 +200,7 @@ extern "C" void kernelMain(const void *multiboot_structure,
 
     DriverManager drvManager;
 
-    // Keyboard interrupt handler and driver
+    // BEGIN Keyboard interrupt handler and driver
     #ifdef GRAPHICSMODE
         KeyboardDriver keyboard(&interrupts, &desktop);
     #else
@@ -208,8 +209,9 @@ extern "C" void kernelMain(const void *multiboot_structure,
     #endif
         
     drvManager.AddDriver(&keyboard);
+    // END
 
-    // Mouse interrupt handler and driver
+    // BEGIN Mouse interrupt handler and driver
     #ifdef GRAPHICSMODE
         MouseDriver mouse(&interrupts, &desktop);
     #else
@@ -218,17 +220,19 @@ extern "C" void kernelMain(const void *multiboot_structure,
     #endif
         
     drvManager.AddDriver(&mouse);
+    // END
     
-    printf("\n");
+    // BEGIN PCI
     PeripheralComponentInterconnectController PCIController;
     PCIController.SelectDrivers(&drvManager, &interrupts);
+    // END
     
     VideoGraphicsArray vga;
     
-    printf("\nInitializing Hardware, Stage 2\n");
+    printf("Initializing Hardware, Stage 2\n");
     drvManager.ActivateAll();
 
-    printf("\nInitializing Hardware, Stage 3\n");
+    printf("Initializing Hardware, Stage 3\n");
     
     #ifdef GRAPHICSMODE
         vga.SetMode(320, 200, 8);
@@ -239,10 +243,33 @@ extern "C" void kernelMain(const void *multiboot_structure,
         Window win2(&desktop, 40, 15, 30, 30, 0x00, 0xA8, 0x00);
         desktop.AddChild(&win2);
     #endif
+        
+    printf("S-ATA primary master: ");
+    AdvancedTechnologyAttachment ata0m(true, 0x1F0);
+    ata0m.Identify();
+    ata0m.Write28(0, (uint8_t*)"http://www.AlgorithMan.de", 25);
+    ata0m.Flush();
+    ata0m.Read28(0, 25);
     
-    // BEGIN Networking testing
+    /*
+    printf("\nS-ATA primary slave: ");
+    AdvancedTechnologyAttachment ata0s(false, 0x1F0);
+
+    printf("\nS-ATA secondary master: ");
+    AdvancedTechnologyAttachment ata1m(true, 0x170);
+    ata1m.Identify();
+
+    printf("\nS-ATA secondary slave: ");
+    AdvancedTechnologyAttachment ata1s(false, 0x170);
+    ata1s.Identify();
+    */
+
+    // third: 0x1E8
+    // fourth: 0x168
+    
+    // BEGIN Networking
     amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
-    eth0->Send((uint8_t*)"Hello Network", 13);
+    //eth0->Send((uint8_t*)"Hello Network", 13);
     // END
     
     interrupts.Activate();
