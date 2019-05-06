@@ -6,14 +6,14 @@
 #include <multitasking.h>
 
 namespace iregonos {
-    
+
     class SyscallHandler : public hardwarecommunication::InterruptHandler {
     public:
-        SyscallHandler(hardwarecommunication::InterruptManager* interruptManager, 
+        SyscallHandler(hardwarecommunication::InterruptManager *interruptManager,
                        iregonos::common::uint8_t InterruptNumber);
-        
+
         ~SyscallHandler();
-        
+
         virtual iregonos::common::uint32_t HandleInterrupt(iregonos::common::uint32_t esp);
     };
 }

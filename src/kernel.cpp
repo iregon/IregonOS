@@ -139,7 +139,7 @@ public:
     }
 };
 
-void sysprintf(char* str) {
+void sysprintf(char *str) {
     asm("int $0x80" : : "a" (4), "b" (str));
 }
 
@@ -236,9 +236,9 @@ extern "C" void kernelMain(const void *multiboot_structure,
     PCIController.SelectDrivers(&drvManager, &interrupts);
     // END
 
-    #ifdef GRAPHICSMODE
-        VideoGraphicsArray vga;
-    #endif
+#ifdef GRAPHICSMODE
+    VideoGraphicsArray vga;
+#endif
 
     printf("Initializing Hardware, Stage 2\n");
     drvManager.ActivateAll();
@@ -283,7 +283,7 @@ extern "C" void kernelMain(const void *multiboot_structure,
     // BEGIN Networking
     amd_am79c973 *eth0 = (amd_am79c973 * )(drvManager.drivers[2]);
     EtherFrameProvider etherframe(eth0);
-    etherframe.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t*)"FOO", 3);
+    etherframe.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t *) "FOO", 3);
     // END
 
     interrupts.Activate();

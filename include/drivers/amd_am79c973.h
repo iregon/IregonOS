@@ -9,21 +9,21 @@
 
 namespace iregonos {
     namespace drivers {
-        
+
         class amd_am79c973;
 
         class RawDataHandler {
         protected:
-            amd_am79c973* backend;
+            amd_am79c973 *backend;
         public:
-            RawDataHandler(amd_am79c973* backend);
-            
+            RawDataHandler(amd_am79c973 *backend);
+
             ~RawDataHandler();
 
-             virtual bool OnRawDataReceived(common::uint8_t* buffer,
-                                    common::uint32_t size);
-             
-            void Send(common::uint8_t* buffer, common::uint32_t size);
+            virtual bool OnRawDataReceived(common::uint8_t *buffer,
+                                           common::uint32_t size);
+
+            void Send(common::uint8_t *buffer, common::uint32_t size);
         };
 
         class amd_am79c973 : public Driver, public hardwarecommunication::InterruptHandler {
@@ -69,8 +69,8 @@ namespace iregonos {
             common::uint8_t recvBufferDescrMemory[2048 + 15];
             common::uint8_t recvBuffers[2 * 1024 + 15][8];
             common::uint8_t currentRecvBuffer;
-            
-            RawDataHandler* handler;
+
+            RawDataHandler *handler;
 
         public:
             amd_am79c973(iregonos::hardwarecommunication::PeripheralComponentInterconnectDeviceDescriptor *dev,
@@ -88,9 +88,9 @@ namespace iregonos {
                       int count);
 
             void Receive();
-            
-            void SetHandler(RawDataHandler* handler);
-            
+
+            void SetHandler(RawDataHandler *handler);
+
             common::uint64_t GetMACAddress();
         };
     }

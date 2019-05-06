@@ -94,7 +94,7 @@ namespace iregonos {
             static void HandleInterruptRequest0x0F();
 
             static void HandleInterruptRequest0x31();
-            
+
             static void HandleInterruptRequest0x80(); // System calls
 
 
