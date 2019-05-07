@@ -1,4 +1,5 @@
 #include <common/types.h>
+#include <common/memory.h>
 #include <gdt.h>
 #include <memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
@@ -25,8 +26,14 @@ using namespace iregonos::hardwarecommunication;
 using namespace iregonos::gui;
 using namespace iregonos::net;
 
-void cleanScreen(int length,
+void scrollScreen(int width,
+                  int height);
+
+void cleanScreen(int width,
                  int height);
+
+void deleteLastRow(int numCols,
+                   int numRows);
 
 void deleteCharacter(int x,
                      int y);
@@ -55,27 +62,44 @@ void printf(char *str) {
             y++;
         }
 
-        // Clean screen
         if (y >= 25) {
-            cleanScreen(80, 25);
-            // Reset cursor
-            x = 0;
-            y = 0;
+            scrollScreen(80, 25);
+            deleteLastRow(80, 25);
+//            cleanScreen(80, 25);
+//            // Reset cursor
+//            x = 0;
+//            y = 0;
         }
     }
 }
 
-void cleanScreen(int length,
+void scrollScreen(int width,
+                  int height) {
+    static uint16_t *videoMemory = (uint16_t *) 0xb8000;
+
+    memmove((void *) videoMemory, (void *) (videoMemory + (sizeof(uint_16 * ) * width)), 1920)
+}
+
+void cleanScreen(int width,
                  int height) {
     for (int y = 0; y < height; y++)
-        for (int x = 0; x < length; x++)
+        for (int x = 0; x < width; x++)
             deleteCharacter(x, y);
+}
+
+void deleteLastRow(int numCols, int numRows) {
+    static uint16_t *videoMemory = (uint16_t *) 0xb8000;
+    uint_16 *start = videoMemory * 1920; // 80 (cols) * 24 (rows)
+
+    for (int i = 0; i < numCols; i++)
+        deleteCharacter(numRows, start[i]);
 }
 
 void deleteCharacter(int x,
                      int y) {
     static uint16_t *videoMemory = (uint16_t *) 0xb8000;
 
+    // 0x20 = space character code in ascii
     videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | 0x20;
 }
 
@@ -284,29 +308,29 @@ extern "C" void kernelMain(const void *multiboot_structure,
     // BEGIN Networking
     // IP 10.0.2.15
     uint8_t ip1 = 10, ip2 = 0, ip3 = 2, ip4 = 15;
-    uint32_t ip_be = ((uint32_t)ip4 << 24)
-                | ((uint32_t)ip3 << 16)
-                | ((uint32_t)ip2 << 8)
-                | (uint32_t)ip1;
+    uint32_t ip_be = ((uint32_t) ip4 << 24)
+                     | ((uint32_t) ip3 << 16)
+                     | ((uint32_t) ip2 << 8)
+                     | (uint32_t) ip1;
 
-     // IP 10.0.2.2
+    // IP 10.0.2.2
     uint8_t gip1 = 10, gip2 = 0, gip3 = 2, gip4 = 2;
-    uint32_t gip_be = ((uint32_t)gip4 << 24)
-                   | ((uint32_t)gip3 << 16)
-                   | ((uint32_t)gip2 << 8)
-                   | (uint32_t)gip1;
-                   
-    amd_am79c973 *eth0 = (amd_am79c973 *)(drvManager.drivers[2]);
+    uint32_t gip_be = ((uint32_t) gip4 << 24)
+                      | ((uint32_t) gip3 << 16)
+                      | ((uint32_t) gip2 << 8)
+                      | (uint32_t) gip1;
+
+    amd_am79c973 *eth0 = (amd_am79c973 * )(drvManager.drivers[2]);
     eth0->SetIPAddress(ip_be);
     EtherFrameProvider etherframe(eth0);
-    AddressResolutionProtocol arp(&etherframe);    
+    AddressResolutionProtocol arp(&etherframe);
 
     //etherframe.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t*)"FOO", 3);
     //eth0->Send((uint8_t*)"Hello Network", 13);
     // END
 
     interrupts.Activate();
-    
+
     printf("\n\n\n\n\n\n\n\n");
     arp.Resolve(gip_be);
 
