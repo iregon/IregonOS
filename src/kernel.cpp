@@ -1,5 +1,5 @@
 #include <common/types.h>
-#include <common/memory.h>
+//#include <common/memory.h>
 #include <gdt.h>
 #include <memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
@@ -28,6 +28,10 @@ using namespace iregonos::net;
 
 void scrollScreen(int width,
                   int height);
+
+void memmove(uint16_t *dest,
+             uint16_t *src,
+             size_t n);
 
 void cleanScreen(int width,
                  int height);
@@ -63,8 +67,10 @@ void printf(char *str) {
         }
 
         if (y >= 25) {
+            // Scroll
             scrollScreen(80, 25);
             deleteLastRow(80, 25);
+            y = 24;
 //            cleanScreen(80, 25);
 //            // Reset cursor
 //            x = 0;
@@ -76,8 +82,13 @@ void printf(char *str) {
 void scrollScreen(int width,
                   int height) {
     static uint16_t *videoMemory = (uint16_t *) 0xb8000;
+    
+    memmove(videoMemory, &videoMemory[width], 1920);
+}
 
-    memmove((void *) videoMemory, (void *) (videoMemory + (sizeof(uint_16 * ) * width)), 1920)
+void memmove(uint16_t *dest, uint16_t *src, size_t n) {
+    for (int i = 0; i < n; i++)
+        dest[i] = src[i];
 }
 
 void cleanScreen(int width,
@@ -89,10 +100,10 @@ void cleanScreen(int width,
 
 void deleteLastRow(int numCols, int numRows) {
     static uint16_t *videoMemory = (uint16_t *) 0xb8000;
-    uint_16 *start = videoMemory * 1920; // 80 (cols) * 24 (rows)
+    uint16_t *start = &videoMemory[1920]; // 80 (cols) * 24 (rows)
 
     for (int i = 0; i < numCols; i++)
-        deleteCharacter(numRows, start[i]);
+        deleteCharacter(i, numRows - 1);
 }
 
 void deleteCharacter(int x,
@@ -331,8 +342,8 @@ extern "C" void kernelMain(const void *multiboot_structure,
 
     interrupts.Activate();
 
-    printf("\n\n\n\n\n\n\n\n");
-    arp.Resolve(gip_be);
+    //printf("\n\n\n\n\n\n\n\n");
+    //arp.Resolve(gip_be);
 
     while (1) {
 #ifdef GRAPHICSMODE
