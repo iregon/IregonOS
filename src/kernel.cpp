@@ -1,5 +1,4 @@
 #include <common/types.h>
-//#include <common/memory.h>
 #include <gdt.h>
 #include <memorymanagement.h>
 #include <hardwarecommunication/interrupts.h>
@@ -65,7 +64,8 @@ void printf(char *str) {
             x = 0;
             y++;
         }
-
+        
+        // FIXME fix mouse cursor on scrolling
         if (y >= 25) {
             // Scroll
             scrollScreen(80, 25);
