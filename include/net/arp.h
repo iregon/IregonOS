@@ -41,6 +41,8 @@ namespace iregonos {
             common::uint64_t GetMACFromCache(common::uint32_t IP_BE);
             
             common::uint64_t Resolve(common::uint32_t IP_BE);
+            
+            void BroadcastMACAddress(common::uint32_t IP_BE);
         };
         
         

@@ -139,7 +139,7 @@ uint32_t amd_am79c973::HandleInterrupt(common::uint32_t esp) {
     if ((temp & 0x1000) == 0x1000) printf("AMD am79c973 MISSED FRAME\n");
     if ((temp & 0x0800) == 0x0800) printf("AMD am79c973 MEMORY ERROR\n");
     if ((temp & 0x0400) == 0x0400) Receive();
-    if ((temp & 0x0200) == 0x0200) printf("AMD am79c973 DATA SENT\n");
+    if ((temp & 0x0200) == 0x0200) printf(" SENT\n");
 
     // acknoledge
     registerAddressPort.Write(0);
@@ -162,8 +162,8 @@ void amd_am79c973::Send(uint8_t *buffer, int size) {
          src >= buffer; src--, dst--)
         *dst = *src;
     
-    printf("Sending: ");
-    for(int i = 0; i < size; i++)
+    printf("\nSENDING: ");
+    for(int i = 0; i < (size > 64 ? 64 : size); i++)
     {
         printfHex(buffer[i]);
         printf(" ");
@@ -178,7 +178,7 @@ void amd_am79c973::Send(uint8_t *buffer, int size) {
 }
 
 void amd_am79c973::Receive() {
-    printf("AMD am79c973 DATA RECEIVED\n");
+    printf("\nRECEIVING: ");
 
     for (; (recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0;
            currentRecvBuffer = (currentRecvBuffer + 1) % 8) {
@@ -190,15 +190,14 @@ void amd_am79c973::Receive() {
 
             uint8_t *buffer = (uint8_t * )(recvBufferDescr[currentRecvBuffer].address);
 
-            if (handler != 0)
-                if (handler->OnRawDataReceived(buffer, size))
-                    Send(buffer, size);
-
-            size = 64;
-            for (int i = 0; i < size; i++) {
+            for(int i = 0; i < (size > 64 ? 64 : size); i++) {
                 printfHex(buffer[i]);
                 printf(" ");
             }
+            
+            if(handler != 0)
+                if(handler->OnRawDataReceived(buffer, size))
+                    Send(buffer, size);
         }
 
         recvBufferDescr[currentRecvBuffer].flags2 = 0;
