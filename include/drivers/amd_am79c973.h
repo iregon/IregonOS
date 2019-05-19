@@ -92,9 +92,9 @@ namespace iregonos {
             void SetHandler(RawDataHandler *handler);
 
             common::uint64_t GetMACAddress();
-            
+
             void SetIPAddress(common::uint32_t);
-            
+
             common::uint32_t GetIPAddress();
         };
     }

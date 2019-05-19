@@ -161,14 +161,13 @@ void amd_am79c973::Send(uint8_t *buffer, int size) {
                  *dst = (uint8_t * )(sendBufferDescr[sendDescriptor].address + size - 1);
          src >= buffer; src--, dst--)
         *dst = *src;
-    
+
     printf("\nSENDING: ");
-    for(int i = 0; i < (size > 64 ? 64 : size); i++)
-    {
+    for (int i = 0; i < (size > 64 ? 64 : size); i++) {
         printfHex(buffer[i]);
         printf(" ");
     }
-    
+
     sendBufferDescr[sendDescriptor].avail = 0;
     sendBufferDescr[sendDescriptor].flags2 = 0;
     sendBufferDescr[sendDescriptor].flags = 0x8300F000
@@ -190,13 +189,13 @@ void amd_am79c973::Receive() {
 
             uint8_t *buffer = (uint8_t * )(recvBufferDescr[currentRecvBuffer].address);
 
-            for(int i = 0; i < (size > 64 ? 64 : size); i++) {
+            for (int i = 0; i < (size > 64 ? 64 : size); i++) {
                 printfHex(buffer[i]);
                 printf(" ");
             }
-            
-            if(handler != 0)
-                if(handler->OnRawDataReceived(buffer, size))
+
+            if (handler != 0)
+                if (handler->OnRawDataReceived(buffer, size))
                     Send(buffer, size);
         }
 

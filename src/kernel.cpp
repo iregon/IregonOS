@@ -66,7 +66,7 @@ void printf(char *str) {
             x = 0;
             y++;
         }
-        
+
         // FIXME fix mouse cursor on scrolling
         if (y >= 25) {
             // Scroll
@@ -84,7 +84,7 @@ void printf(char *str) {
 void scrollScreen(int width,
                   int height) {
     static uint16_t *videoMemory = (uint16_t *) 0xb8000;
-    
+
     memmove(videoMemory, &videoMemory[width], 1920);
 }
 
@@ -319,9 +319,9 @@ extern "C" void kernelMain(const void *multiboot_structure,
     // fourth: 0x168
 
     // BEGIN Networking
-    
-    amd_am79c973* eth0 = (amd_am79c973*)(drvManager.drivers[2]);
-    
+
+    amd_am79c973 *eth0 = (amd_am79c973 * )(drvManager.drivers[2]);
+
     // IP Address
     uint8_t ip1 = 10, ip2 = 0, ip3 = 2, ip4 = 15;
     uint32_t ip_be = ((uint32_t) ip4 << 24)
@@ -338,13 +338,13 @@ extern "C" void kernelMain(const void *multiboot_structure,
                       | ((uint32_t) gip3 << 16)
                       | ((uint32_t) gip2 << 8)
                       | (uint32_t) gip1;
-    
+
     uint8_t subnet1 = 255, subnet2 = 255, subnet3 = 255, subnet4 = 0;
-    uint32_t subnet_be = ((uint32_t)subnet4 << 24)
-                   | ((uint32_t)subnet3 << 16)
-                   | ((uint32_t)subnet2 << 8)
-                   | (uint32_t)subnet1;
-    
+    uint32_t subnet_be = ((uint32_t) subnet4 << 24)
+                         | ((uint32_t) subnet3 << 16)
+                         | ((uint32_t) subnet2 << 8)
+                         | (uint32_t) subnet1;
+
     InternetProtocolProvider ipv4(&etherframe, &arp, gip_be, subnet_be);
     InternetControlMessageProtocol icmp(&ipv4);
 

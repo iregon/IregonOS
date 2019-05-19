@@ -13,7 +13,7 @@ EtherFrameHandler::EtherFrameHandler(EtherFrameProvider *backend, uint16_t ether
 }
 
 EtherFrameHandler::~EtherFrameHandler() {
-    if(backend->handlers[etherType_BE] == this)
+    if (backend->handlers[etherType_BE] == this)
         backend->handlers[etherType_BE] = 0;
 }
 
@@ -39,9 +39,9 @@ EtherFrameProvider::~EtherFrameProvider() {
 
 bool EtherFrameProvider::OnRawDataReceived(common::uint8_t *buffer,
                                            common::uint32_t size) {
-    if(size < sizeof(EtherFrameHeader))
+    if (size < sizeof(EtherFrameHeader))
         return false;
-    
+
     EtherFrameHeader *frame = (EtherFrameHeader *) buffer;
     bool sendBack = false;
 
@@ -77,7 +77,7 @@ void EtherFrameProvider::Send(common::uint64_t dstMAC_BE,
         dst[i] = src[i];
 
     backend->Send(buffer2, size + sizeof(EtherFrameHeader));
-    
+
     MemoryManager::activeMemoryManager->free(buffer2);
 }
 
