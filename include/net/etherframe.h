@@ -35,10 +35,11 @@ namespace iregonos {
 
             void Send(common::uint64_t dstMAC_BE, common::uint8_t *etherframePayload,
                       common::uint32_t size);
+            
+            common::uint32_t GetIPAddress();
         };
 
-        class EtherFrameProvider
-                : public iregonos::drivers::RawDataHandler {
+        class EtherFrameProvider : public iregonos::drivers::RawDataHandler {
             friend class EtherFrameHandler;
 
         protected:
@@ -55,10 +56,10 @@ namespace iregonos {
                       common::uint16_t etherType_BE,
                       common::uint8_t *buffer,
                       common::uint32_t size);
+            
+            common::uint32_t GetIPAddress();
 
             common::uint64_t GetMACAddress();
-
-            common::uint32_t GetIPAddress();
         };
     }
 }

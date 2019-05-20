@@ -5,6 +5,8 @@ using namespace iregonos::common;
 using namespace iregonos::net;
 using namespace iregonos::drivers;
 
+// BEGIN EtherFrameHandler
+
 EtherFrameHandler::EtherFrameHandler(EtherFrameProvider *backend, uint16_t etherType) {
     this->etherType_BE = ((etherType & 0x00FF) << 8)
                          | ((etherType & 0xFF00) >> 8);
@@ -28,14 +30,21 @@ void EtherFrameHandler::Send(common::uint64_t dstMAC_BE,
     backend->Send(dstMAC_BE, etherType_BE, data, size);
 }
 
+uint32_t EtherFrameHandler::GetIPAddress() {
+    return backend->GetIPAddress();
+}
+
+// END
+
+// BEGIN EtherFrameProvider
+
 EtherFrameProvider::EtherFrameProvider(amd_am79c973 *backend)
         : RawDataHandler(backend) {
     for (uint32_t i = 0; i < 65535; i++)
         handlers[i] = 0;
 }
 
-EtherFrameProvider::~EtherFrameProvider() {
-}
+EtherFrameProvider::~EtherFrameProvider() {}
 
 bool EtherFrameProvider::OnRawDataReceived(common::uint8_t *buffer,
                                            common::uint32_t size) {
@@ -88,3 +97,5 @@ uint32_t EtherFrameProvider::GetIPAddress() {
 uint64_t EtherFrameProvider::GetMACAddress() {
     return backend->GetMACAddress();
 }
+
+// END
