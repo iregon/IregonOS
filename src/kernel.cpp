@@ -15,6 +15,7 @@
 #include <net/ipv4.h>
 #include <net/icmp.h>
 #include <net/udp.h>
+#include <net/tcp.h>
 #include <gui/desktop.h>
 #include <gui/window.h>
 #include <multitasking.h>
@@ -57,7 +58,8 @@ void printf(char *str) {
                 break;
                 // Print character
             default:
-                videoMemory[80 * y + x] = (videoMemory[80 * y + x] & 0xFF00) | str[i];
+                //videoMemory[80 * y + x] = (str[i] >= 0x20 && str[i] <= 0x7e) ? (videoMemory[80 * y + x] & 0xFF00) | str[i] : 0x20;
+                videoMemory[80 * y + x] = (str[i] >= 0x20 && str[i] <= 0x7e) ? (videoMemory[80 * y + x] & 0xFF00) | str[i] : (videoMemory[80 * y + x] & 0xFF00) | 0x20;
                 x++;
                 break;
         }
@@ -68,7 +70,7 @@ void printf(char *str) {
             y++;
         }
 
-        // FIXME fix mouse cursor on scrolling
+        // TODO fix mouse cursor on scrolling
         if (y >= 25) {
             // Scroll
             scrollScreen(80, 25);
@@ -190,6 +192,39 @@ public:
         }
     }
 };
+
+class PrintfTCPHandler : public TransmissionControlProtocolHandler {
+public:
+    bool HandleTransmissionControlProtocolMessage(TransmissionControlProtocolSocket* socket,
+                                                  common::uint8_t* data,
+                                                  common::uint16_t size) {
+        printf("\nData received ");
+        char* foo = " ";
+        for(int i = 0; i < size; i++) {
+            foo[0] = data[i];
+            printf(foo);
+        }
+        
+        if(size > 9
+            && data[0] == 'G'
+            && data[1] == 'E'
+            && data[2] == 'T'
+            && data[3] == ' '
+            && data[4] == '/'
+            && data[5] == ' '
+            && data[6] == 'H'
+            && data[7] == 'T'
+            && data[8] == 'T'
+            && data[9] == 'P'
+        ) {
+            socket->Send((uint8_t*)"HTTP/1.1 200 OK\r\nServer: MyOS\r\nContent-Type: text/html\r\n\r\n<html><head><title>My Operating System</title></head><body><b>My Operating System</b> http://www.AlgorithMan.de</body></html>\r\n",184);
+            socket->Disconnect();
+        }
+
+        return true;
+    }
+};
+
 
 void sysprintf(char *str) {
     asm("int $0x80" : : "a" (4), "b" (str));
@@ -362,6 +397,7 @@ extern "C" void kernelMain(const void *multiboot_structure,
     InternetProtocolProvider ipv4(&etherframe, &arp, gip_be, subnet_be);
     InternetControlMessageProtocol icmp(&ipv4);
     UserDatagramProtocolProvider udp(&ipv4);
+    TransmissionControlProtocolProvider tcp(&ipv4);
 
     //etherframe.Send(0xFFFFFFFFFFFF, 0x0608, (uint8_t*)"FOO", 3);
     //eth0->Send((uint8_t*)"Hello Network", 13);
@@ -370,15 +406,22 @@ extern "C" void kernelMain(const void *multiboot_structure,
     interrupts.Activate();
 
     arp.BroadcastMACAddress(gip_be);
+    
+    tcp.Connect(gip_be, 1234);
+    PrintfTCPHandler tcphandler;
+    TransmissionControlProtocolSocket* tcpsocket = tcp.Listen(1234);
+    tcp.Bind(tcpsocket, &tcphandler);
+    //tcpsocket->Send((uint8_t*)"Hello TCP!", 10);
+    
     icmp.RequestEchoReply(gip_be);
     
-    PrintfUDPHandler udphandler;
+    //PrintfUDPHandler udphandler;
     //UserDatagramProtocolSocket* udpsocket = udp.Connect(gip_be, 1234);
     //udp.Bind(udpsocket, &udphandler);
     //udpsocket->Send((uint8_t*)"Hello UDP!", 10);
 
-    UserDatagramProtocolSocket* udpsocket = udp.Listen(1234);
-    udp.Bind(udpsocket, &udphandler);
+    //UserDatagramProtocolSocket* udpsocket = udp.Listen(1234);
+    //udp.Bind(udpsocket, &udphandler);
     
     // END
 

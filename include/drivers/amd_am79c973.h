@@ -59,7 +59,6 @@ namespace iregonos {
 
             InitializationBlock initBlock;
 
-
             BufferDescriptor *sendBufferDescr;
             common::uint8_t sendBufferDescrMemory[2048 + 15];
             common::uint8_t sendBuffers[2 * 1024 + 15][8];

@@ -31,6 +31,7 @@ objects = obj/loader.o \
           obj/net/ipv4.o \
           obj/net/icmp.o \
           obj/net/udp.o \
+          obj/net/tcp.o \
           obj/kernel.o
 
 

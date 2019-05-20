@@ -154,49 +154,47 @@ void amd_am79c973::Send(uint8_t *buffer, int size) {
     int sendDescriptor = currentSendBuffer;
     currentSendBuffer = (currentSendBuffer + 1) % 8;
 
-    if (size > 1518)
-        size = 1518;
+    if (size > 1518) size = 1518;
 
     for (uint8_t *src = buffer + size - 1,
-                 *dst = (uint8_t * )(sendBufferDescr[sendDescriptor].address + size - 1);
-         src >= buffer; src--, dst--)
-        *dst = *src;
+        *dst = (uint8_t * )(sendBufferDescr[sendDescriptor].address + size - 1); src >= buffer; src--,
+         dst--) *dst = *src;
 
-    printf("\nSENDING: ");
-    for (int i = 0; i < (size > 64 ? 64 : size); i++) {
+    printf("\nSEND: ");
+    for(int i = 14 + 20; i < (size > 64 ? 64 : size); i++) {
         printfHex(buffer[i]);
         printf(" ");
     }
 
     sendBufferDescr[sendDescriptor].avail = 0;
     sendBufferDescr[sendDescriptor].flags2 = 0;
-    sendBufferDescr[sendDescriptor].flags = 0x8300F000
-                                            | ((uint16_t)((-size) & 0xFFF));
+    sendBufferDescr[sendDescriptor].flags = 0x8300F000 | ((uint16_t)((-size) & 0xFFF));
+    
     registerAddressPort.Write(0);
     registerDataPort.Write(0x48);
 }
 
 void amd_am79c973::Receive() {
-    printf("\nRECEIVING: ");
+    printf("\nRECV: ");
 
     for (; (recvBufferDescr[currentRecvBuffer].flags & 0x80000000) == 0;
            currentRecvBuffer = (currentRecvBuffer + 1) % 8) {
         if (!(recvBufferDescr[currentRecvBuffer].flags & 0x40000000)
             && (recvBufferDescr[currentRecvBuffer].flags & 0x03000000) == 0x03000000) {
             uint32_t size = recvBufferDescr[currentRecvBuffer].flags & 0xFFF;
-            if (size > 64) // remove checksum
-                size -= 4;
+        
+            // remove checksum
+            if (size > 64) size -= 4;
 
             uint8_t *buffer = (uint8_t * )(recvBufferDescr[currentRecvBuffer].address);
 
-            for (int i = 0; i < (size > 64 ? 64 : size); i++) {
+            for (int i = 20; i < (size > 64 ? 64 : size); i++) {
                 printfHex(buffer[i]);
                 printf(" ");
             }
 
             if (handler != 0)
-                if (handler->OnRawDataReceived(buffer, size))
-                    Send(buffer, size);
+                if (handler->OnRawDataReceived(buffer, size)) Send(buffer, size);
         }
 
         recvBufferDescr[currentRecvBuffer].flags2 = 0;
